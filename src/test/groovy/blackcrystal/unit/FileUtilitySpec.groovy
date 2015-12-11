@@ -6,6 +6,8 @@ import blackcrystal.utility.FileUtility
 import blackcrystal.utility.TestUtils
 import spock.lang.Specification
 
+import java.nio.file.Path
+
 class FileUtilitySpec extends Specification {
 
     TestUtils testUtils = new TestUtils();
@@ -27,6 +29,15 @@ class FileUtilitySpec extends Specification {
         jobConfig.sourcePath == "/source/path"
         jobConfig.executionTime == "0 0/1 * * * ?"
         jobConfig.command == "/execute/something"
+    }
+
+
+    def "return only sub directories"() {
+        List<Path> directories = FileUtility.getSubDirectories(testUtils.jobConfigDirectory);
+
+        expect:
+        directories != null
+        directories.size() == 2
     }
 
 

@@ -2,6 +2,7 @@ package blackcrystal.utility
 
 class TestUtils {
 
+    String jobConfigDirectory = getPath("/sampleconfig")
     String firstConfigFile = getPath("/sampleconfig/TestJob1/config.json")
     String seconfConfigFile = getPath("/sampleconfig/TestJob1/config.json")
 
