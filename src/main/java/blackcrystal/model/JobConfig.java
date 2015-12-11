@@ -1,4 +1,4 @@
-package blackcrystal.data.domain;
+package blackcrystal.model;
 
 public class JobConfig {
 
@@ -10,7 +10,7 @@ public class JobConfig {
 
     public String sourcePath;
 
-   // public Long executionCount;
+    public String executionTime;
 
 }
 

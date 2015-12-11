@@ -1,7 +1,7 @@
 package blackcrystal.app;
 
 
-import blackcrystal.data.domain.JobConfig;
+import blackcrystal.model.JobConfig;
 import blackcrystal.utility.FileUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

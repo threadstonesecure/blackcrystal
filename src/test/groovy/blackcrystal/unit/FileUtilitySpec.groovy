@@ -1,7 +1,7 @@
 package blackcrystal.unit
 
 
-import blackcrystal.data.domain.JobConfig
+import blackcrystal.model.JobConfig
 import blackcrystal.utility.FileUtility
 import blackcrystal.utility.TestUtils
 import spock.lang.Specification

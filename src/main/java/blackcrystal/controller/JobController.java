@@ -1,69 +1,40 @@
 package blackcrystal.controller;
 
-import blackcrystal.app.ApplicationProperties;
-import blackcrystal.data.domain.JobConfig;
-import blackcrystal.data.service.JobService;
-import blackcrystal.runner.domain.Queue;
-import blackcrystal.runner.service.QueueService;
+import blackcrystal.service.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
 
 @Controller
 public class JobController {
 
-	@Autowired
-	private JobService jobService;
-
     @Autowired
-    private ApplicationProperties properties;
-
-    @Autowired
-    private QueueService queueService;
+    private JobService jobService;
 
 
-    @RequestMapping("/job/{name}")
     @ResponseBody
-    public JobConfig getJob(@PathVariable String name) throws Exception{
-        try{
-            return this.jobService.getJob(name);
-        }catch (Exception e){
-            throw e;
-        }
+    @RequestMapping(value = "/job/{name}", method = RequestMethod.GET)
+    public ResponseEntity getJob(@PathVariable String name) {
+        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
     }
+
 
     @RequestMapping("/job/{name}/run")
     @ResponseBody
-    public String runJob(@PathVariable String name){
-        try{
-            queueService.add(new Queue(this.jobService.getJob(name)));
-        }catch (Exception e){
-
-        }
-
-        return "ok";
+    public ResponseEntity runJob(@PathVariable String name) {
+        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
     }
 
-
-    @RequestMapping("/queue")
+    @RequestMapping("/job/{name}/cancel")
     @ResponseBody
-    public List<Queue> queue(){
-        return queueService.getAll();
+    public ResponseEntity cancelJob(@PathVariable String name) {
+        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
     }
-
-
-    @RequestMapping("/prop")
-    @ResponseBody
-    @Transactional(readOnly = true)
-    public ApplicationProperties getProb() {
-        return this.properties;
-    }
-
 
 
 }
