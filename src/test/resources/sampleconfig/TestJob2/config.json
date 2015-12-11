@@ -1,0 +1,7 @@
+{
+  "command": "/execute/something",
+  "executionDirectory": "/execution/directory",
+  "name": "TestJob2",
+  "sourcePath": "/source/path",
+  "executionTime": "0 0/1 * * * ?"
+}

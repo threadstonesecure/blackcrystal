@@ -11,6 +11,10 @@ import org.springframework.validation.Validator;
 @EnableScheduling
 public class Application {
 
+    /**
+     * Validate application configuration.
+     * @return
+     */
     @Bean
     public Validator configurationPropertiesValidator() {
         return new PropertyValidator();

@@ -1,0 +1,1 @@
+This file is added only for test purpuses
