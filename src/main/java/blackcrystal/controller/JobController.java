@@ -16,23 +16,55 @@ public class JobController {
     @Autowired
     private JobService jobService;
 
+    @RequestMapping("/jobs")
+    @ResponseBody
+    public ResponseEntity getAll() {
+        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    }
 
     @ResponseBody
     @RequestMapping(value = "/job/{name}", method = RequestMethod.GET)
-    public ResponseEntity getJob(@PathVariable String name) {
+    public ResponseEntity get(@PathVariable String name) {
+        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/job/{name}", method = RequestMethod.PUT)
+    public ResponseEntity put(@PathVariable String name) {
+        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/job/{name}", method = RequestMethod.POST)
+    public ResponseEntity post(@PathVariable String name) {
+        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/job/{name}", method = RequestMethod.DELETE)
+    public ResponseEntity delete(@PathVariable String name) {
         return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
     }
 
 
     @RequestMapping("/job/{name}/run")
     @ResponseBody
-    public ResponseEntity runJob(@PathVariable String name) {
+    public ResponseEntity run(@PathVariable String name) {
         return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
     }
 
     @RequestMapping("/job/{name}/cancel")
     @ResponseBody
-    public ResponseEntity cancelJob(@PathVariable String name) {
+    public ResponseEntity cancel(@PathVariable String name) {
+        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+
+    @RequestMapping("/job/{name}/reload")
+    @ResponseBody
+    public ResponseEntity reload(@PathVariable String name) {
         return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
     }
 
