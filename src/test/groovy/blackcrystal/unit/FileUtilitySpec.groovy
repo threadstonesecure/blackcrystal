@@ -1,6 +1,5 @@
 package blackcrystal.unit
 
-
 import blackcrystal.model.JobConfig
 import blackcrystal.utility.FileUtility
 import blackcrystal.utility.TestUtils
@@ -13,18 +12,18 @@ class FileUtilitySpec extends Specification {
     TestUtils testUtils = new TestUtils();
 
     def "load file"() {
-        JobConfig jobConfig = FileUtility.getJobConfig(testUtils.firstConfigFile);
-
-        expect:
+        when:
+        JobConfig jobConfig = FileUtility.getJobConfig(testUtils.seconfConfigFile);
+        then:
         jobConfig != null
     }
 
 
     def "parse job config correctly"() {
-        JobConfig jobConfig = FileUtility.getJobConfig(testUtils.firstConfigFile);
-
-        expect:
-        jobConfig.name == "TestJob1"
+        when:
+        JobConfig jobConfig = FileUtility.getJobConfig(testUtils.seconfConfigFile);
+        then:
+        jobConfig.name == "TestJob2"
         jobConfig.executionDirectory == "/execution/directory"
         jobConfig.sourcePath == "/source/path"
         jobConfig.executionTime == "0 0/1 * * * ?"
@@ -33,9 +32,9 @@ class FileUtilitySpec extends Specification {
 
 
     def "return only sub directories"() {
+        when:
         List<Path> directories = FileUtility.getSubDirectories(testUtils.jobsDirectory);
-
-        expect:
+        then:
         directories != null
         directories.size() == 2
     }
