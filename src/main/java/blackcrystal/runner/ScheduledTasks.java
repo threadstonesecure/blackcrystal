@@ -1,6 +1,5 @@
 package blackcrystal.runner;
 
-import blackcrystal.app.ApplicationProperties;
 import blackcrystal.model.JobConfig;
 import blackcrystal.service.JobService;
 import org.slf4j.Logger;
@@ -8,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.task.TaskExecutor;
-
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
@@ -37,7 +35,7 @@ public class ScheduledTasks {
     @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-         return scheduler;
+        return scheduler;
     }
 
     private List<ScheduledFuture> scheduledFutures = new ArrayList<>();
@@ -53,13 +51,29 @@ public class ScheduledTasks {
         return executor;
     }
 
+
+    public boolean addJob(JobConfig jobConfig) {
+        //TODO : TOBE IMPLEMENT
+        return true;
+    }
+
+    public boolean updateJob(JobConfig jobConfig) {
+        //TODO : TOBE IMPLEMENT
+        return true;
+    }
+
+    public boolean deleteJob(String name) {
+        //TODO : TOBE IMPLEMENT
+        return true;
+    }
+
     @Bean
     public boolean loadJobs() {
-        for(JobConfig j : jobService.getJobs()){
+        for (JobConfig j : jobService.getJobs()) {
             ScheduledFuture s = scheduler.schedule(new Runner(j), new CronTrigger(j.executionTime));
             scheduledFutures.add(s);
         }
         return true;
     }
-    
+
 }

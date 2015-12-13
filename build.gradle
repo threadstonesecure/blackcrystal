@@ -35,6 +35,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('com.google.code.gson:gson')
+    compile('commons-io:commons-io:2.4')
+
 
     runtime('com.h2database:h2')
 

@@ -16,10 +16,12 @@ import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
+import spock.lang.Stepwise
 
 @ContextConfiguration(loader = SpringApplicationContextLoader, classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest('server.port:0')
+@Stepwise
 class JobControllerSpec extends Specification {
 
 
@@ -31,23 +33,14 @@ class JobControllerSpec extends Specification {
 
     TestUtils testUtils = new TestUtils()
 
-    String jobId = "TestJob1"
+    String jobId = "/TestJob1"
 
-    String getBasePath() { "job/" }
+    String getBasePath() { "job" }
 
     URI serviceURI(String path = "") {
         new URI("http://localhost:$port/${basePath}${path}")
     }
 
-    void "/jobs should return all available job configuraiton"() {
-        when:
-        def request = RequestEntity.get(new URI("http://localhost:$port/jobs")).build()
-        def response = new RestTemplate().exchange(request, List)
-        then:
-        response.statusCode == HttpStatus.OK
-        response.body.size() == 2
-        response.body.each { assert it.name.contains("TestJob") }
-    }
 
     void "/job/{jobID} should return the job config"() {
         given:
@@ -70,32 +63,57 @@ class JobControllerSpec extends Specification {
     }
 
 
-    void "posting job should return NOT_IMPLEMENTED"() {
+    void "/job/{jobID} on PUT method if exist should return 200 - OK and update resource"() {
         given:
-        RequestEntity request = RequestEntity.post(serviceURI(jobId)).build()
+        def previosConfig = testUtils.firstJobConfig
+        def newConfig = testUtils.firstJobConfig
+        newConfig.command = "newCommand"
         when:
-        new RestTemplate().exchange(request, Object)
+        def request = RequestEntity.put(serviceURI()).body(newConfig)
+        def response = new RestTemplate().exchange(request, JobConfig)
         then:
-        thrown HttpServerErrorException
+        response.body.command != previosConfig.command
+        response.body == newConfig
+        response.statusCode == HttpStatus.OK
     }
 
-    void "putting job should return NOT_IMPLEMENTED"() {
+    void "/job/{jobID} on PUT method if does not exist should return 201 - CREATED and add resource"() {
         given:
-        RequestEntity request = RequestEntity.put(serviceURI(jobId)).build()
+        def expectedConfig = testUtils.thirdTestConfig
         when:
-        new RestTemplate().exchange(request, Object)
+        def request = RequestEntity.put(serviceURI()).body(expectedConfig)
+        def response = new RestTemplate().exchange(request, JobConfig)
         then:
-        thrown HttpServerErrorException
+        response.body == expectedConfig
+        response.statusCode == HttpStatus.CREATED
     }
 
-
-    void "deleting job should return NOT_IMPLEMENTED"() {
+    void "/job/{jobID} on DELETE method, if resource exist, should return 202 - ACCEPTED"() {
         given:
-        RequestEntity request = RequestEntity.delete(serviceURI(jobId)).build()
+        RequestEntity request = RequestEntity.delete(serviceURI("/" + testUtils.thirdTestConfig.name)).build()
         when:
-        new RestTemplate().exchange(request, Object)
+        def response = new RestTemplate().exchange(request, JobConfig)
         then:
-        thrown HttpServerErrorException
+        response.statusCode == HttpStatus.ACCEPTED
+    }
+
+    void "/job/{jobID} on DELETE method, if resource does not exist, should return 404 - NOT_FOUND"() {
+        given:
+        RequestEntity request = RequestEntity.delete(serviceURI("/wrong_job_id")).build()
+        when:
+        new RestTemplate().exchange(request, JobConfig)
+        then:
+        HttpClientErrorException exception = thrown()
+        exception.statusCode == HttpStatus.NOT_FOUND
+    }
+
+    void "/jobs should return all available job configuration"() {
+        when:
+        def request = RequestEntity.get(new URI("http://localhost:$port/jobs")).build()
+        def response = new RestTemplate().exchange(request, List)
+        then:
+        response.statusCode == HttpStatus.OK
+        response.body.each { assert it.name.contains("TestJob") }
     }
 
 

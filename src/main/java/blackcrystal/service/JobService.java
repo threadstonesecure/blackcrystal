@@ -1,32 +1,26 @@
 package blackcrystal.service;
 
-import blackcrystal.app.ApplicationProperties;
 import blackcrystal.model.JobConfig;
-import blackcrystal.utility.FileUtility;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import blackcrystal.runner.ScheduledTasks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component("jobService")
-@Transactional
 public class JobService {
-
-    private static final Logger logger = LoggerFactory.getLogger(ApplicationProperties.class);
-
 
     private List<JobConfig> jobs;
 
     @Autowired
-    private ApplicationProperties properties;
+    private JobConfigService jobConfigService;
 
-    public Optional<JobConfig> getJob(String name) {
+    @Autowired
+    private ScheduledTasks scheduledTasks;
+
+    public Optional<JobConfig> get(String name) {
         return this.getJobs().stream()
                 .filter(j -> j.name.equals(name))
                 .findFirst();
@@ -35,24 +29,53 @@ public class JobService {
 
     public List<JobConfig> getJobs() {
         if (jobs == null) {
-            jobs = loadJobs();
+            jobs = jobConfigService.loadJobs();
         }
         return jobs;
     }
 
-
-    private List<JobConfig> loadJobs() {
-        List<JobConfig> jobs = new ArrayList<>();
-        List<Path> directories = FileUtility.getSubDirectories(properties.getWorkspace() + "/jobs/");
-
-        for (Path p : directories) {
-            try {
-                jobs.add(FileUtility.getJobConfig(p.toString() + "/config.json"));
-            } catch (Exception e) {
-                logger.error("Could not load the jobs:", e);
-            }
+    public Optional<JobConfig> update(JobConfig jobConfig) {
+        if (jobConfigService.write(jobConfig)) {
+            jobs = jobs.stream()
+                    .map(j -> j.name.equals(jobConfig.name) ? jobConfig : j)
+                    .collect(Collectors.toList());
+            scheduledTasks.updateJob(jobConfig);
+            return get(jobConfig.name);
+        } else {
+            return Optional.empty();
         }
-        return jobs;
+    }
+
+    public Optional<JobConfig> create(JobConfig jobConfig) {
+        if (jobConfigService.write(jobConfig)) {
+            jobs.add(jobConfig);
+            scheduledTasks.addJob(jobConfig);
+            return get(jobConfig.name);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public boolean delete(String name) {
+        if (jobConfigService.delete(name)) {
+            jobs = jobs.stream()
+                    .filter(j -> !j.name.equals(name))
+                    .collect(Collectors.toList());
+            scheduledTasks.deleteJob(name);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean jobExist(String name) {
+        JobConfig j = new JobConfig();
+        j.name = name;
+        return jobConfigService.jobExist(j);
+    }
+
+    public boolean jobExist(JobConfig jobConfig) {
+        return jobConfigService.jobExist(jobConfig);
     }
 
 }

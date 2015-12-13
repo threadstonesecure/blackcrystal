@@ -33,4 +33,14 @@ class TestUtils {
         jobConfig.executionTime = "0 0/1 * * * ?"
         jobConfig
     }
+
+    def getThirdTestConfig(){
+        JobConfig jobConfig = new JobConfig()
+        jobConfig.command = "/execute/something"
+        jobConfig.executionDirectory = "/execution/directory"
+        jobConfig.name = "TestJob3"
+        jobConfig.sourcePath = "/source/path"
+        jobConfig.executionTime = "0 0/1 * * * ?"
+        jobConfig
+    }
 }

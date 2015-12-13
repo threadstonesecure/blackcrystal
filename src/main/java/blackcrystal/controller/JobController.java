@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,29 +25,37 @@ public class JobController {
     @ResponseBody
     @RequestMapping(value = "/job/{name}", method = RequestMethod.GET)
     public ResponseEntity<?> get(@PathVariable String name) {
-        return jobService.getJob(name)
+        return jobService.get(name)
                 .map(j -> new ResponseEntity(j, HttpStatus.OK))
                 .orElse(new ResponseEntity(HttpStatus.NOT_FOUND));
     }
 
     @ResponseBody
-    @RequestMapping(value = "/job/{name}", method = RequestMethod.PUT)
-    public ResponseEntity put(@PathVariable String name) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    @RequestMapping(value = "/job", method = RequestMethod.PUT)
+    public ResponseEntity put(@RequestBody JobConfig jobConfig) {
+        if (jobService.jobExist(jobConfig)) {
+            return jobService.update(jobConfig)
+                    .map(j -> new ResponseEntity(j, HttpStatus.OK))
+                    .orElse(new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR));
+        } else {
+            return jobService.create(jobConfig)
+                    .map(j -> new ResponseEntity(j, HttpStatus.CREATED))
+                    .orElse(new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR));
+        }
     }
-
-
-    @ResponseBody
-    @RequestMapping(value = "/job/{name}", method = RequestMethod.POST)
-    public ResponseEntity post(@PathVariable String name) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
-    }
-
 
     @ResponseBody
     @RequestMapping(value = "/job/{name}", method = RequestMethod.DELETE)
     public ResponseEntity delete(@PathVariable String name) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+        if (jobService.jobExist(name)) {
+            if (jobService.delete(name)) {
+                return new ResponseEntity(HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
 
