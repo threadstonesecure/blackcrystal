@@ -2,6 +2,7 @@ package blackcrystal.runner;
 
 import blackcrystal.app.ApplicationProperties;
 import blackcrystal.model.JobConfig;
+import blackcrystal.service.JobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class ScheduledTasks {
 
 
     @Autowired
-    private ApplicationProperties applicationProperties;
+    private JobService jobService;
 
     @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
@@ -54,7 +55,7 @@ public class ScheduledTasks {
 
     @Bean
     public boolean loadJobs() {
-        for(JobConfig j : applicationProperties.getJobs()){
+        for(JobConfig j : jobService.getJobs()){
             ScheduledFuture s = scheduler.schedule(new Runner(j), new CronTrigger(j.executionTime));
             scheduledFutures.add(s);
         }

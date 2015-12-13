@@ -33,7 +33,7 @@ class FileUtilitySpec extends Specification {
 
 
     def "return only sub directories"() {
-        List<Path> directories = FileUtility.getSubDirectories(testUtils.jobConfigDirectory);
+        List<Path> directories = FileUtility.getSubDirectories(testUtils.jobsDirectory);
 
         expect:
         directories != null

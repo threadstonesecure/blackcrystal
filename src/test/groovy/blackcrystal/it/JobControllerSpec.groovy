@@ -1,12 +1,18 @@
 package blackcrystal.it
 
 import blackcrystal.Application
+import blackcrystal.model.JobConfig
+import blackcrystal.utility.TestUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.IntegrationTest
 import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.http.HttpStatus
 import org.springframework.http.RequestEntity
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.web.WebAppConfiguration
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
@@ -17,30 +23,50 @@ import spock.lang.Specification
 class JobControllerSpec extends Specification {
 
 
+    Logger logger = LoggerFactory.getLogger(Specification.class);
+
     @Value('${local.server.port}')
     int port;
 
-    String jobId = "MyJob"
+
+    TestUtils testUtils = new TestUtils()
+
+    String jobId = "TestJob1"
+
     String getBasePath() { "job/" }
 
     URI serviceURI(String path = "") {
         new URI("http://localhost:$port/${basePath}${path}")
     }
 
-    void "fetching all jobs should return NOT_IMPLEMENTED"() {
+    void "/jobs should return all available job configuraiton"() {
         when:
-        new RestTemplate().getForEntity("http://localhost:$port/jobs", String.class)
+        def request = RequestEntity.get(new URI("http://localhost:$port/jobs")).build()
+        def response = new RestTemplate().exchange(request, List)
         then:
-        thrown HttpServerErrorException
+        response.statusCode == HttpStatus.OK
+        response.body.size() == 2
+        response.body.each { assert it.name.contains("TestJob") }
     }
 
-    void "fetching a job should return NOT_IMPLEMENTED"() {
+    void "/job/{jobID} should return the job config"() {
         given:
-        RequestEntity request = RequestEntity.get(serviceURI(jobId)).build()
+        def expectedJobConfig = testUtils.firstJobConfig
         when:
-        new RestTemplate().exchange(request, Object)
+        def request = RequestEntity.get(serviceURI(jobId)).build()
+        def response = new RestTemplate().exchange(request, JobConfig)
         then:
-        thrown HttpServerErrorException
+        response.body == expectedJobConfig
+        response.statusCode == HttpStatus.OK
+    }
+
+    void "/job/{jobID} if job id is wrong it should return 404 - NOT_FOUND"() {
+        when:
+        def request = RequestEntity.get(serviceURI("wrong_job_id")).build()
+        def response = new RestTemplate().exchange(request, JobConfig)
+        then:
+        HttpClientErrorException exception = thrown()
+        exception.statusCode == HttpStatus.NOT_FOUND
     }
 
 

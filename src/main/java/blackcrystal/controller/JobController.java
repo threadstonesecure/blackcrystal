@@ -1,6 +1,7 @@
 package blackcrystal.controller;
 
-import blackcrystal.service.service.JobService;
+import blackcrystal.model.JobConfig;
+import blackcrystal.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 public class JobController {
 
@@ -18,14 +21,16 @@ public class JobController {
 
     @RequestMapping("/jobs")
     @ResponseBody
-    public ResponseEntity getAll() {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<List<JobConfig>> getAll() {
+        return new ResponseEntity(jobService.getJobs(), HttpStatus.OK);
     }
 
     @ResponseBody
     @RequestMapping(value = "/job/{name}", method = RequestMethod.GET)
-    public ResponseEntity get(@PathVariable String name) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<?> get(@PathVariable String name) {
+        return jobService.getJob(name)
+                .map(j -> new ResponseEntity(j, HttpStatus.OK))
+                .orElse(new ResponseEntity(HttpStatus.NOT_FOUND));
     }
 
     @ResponseBody
