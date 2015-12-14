@@ -12,14 +12,15 @@ import java.util.concurrent.Callable;
 @Component
 public class Runner implements Runnable, Callable {
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(Runner.class);
-
-    public Runner() {
-
-    }
+    private static final Logger logger =
+            LoggerFactory.getLogger(Runner.class);
 
     private JobConfig jobConfig;
+
+    public boolean running = true;
+
+    public Runner() {
+    }
 
     public Runner(JobConfig jobConfig) {
         this.jobConfig = jobConfig;

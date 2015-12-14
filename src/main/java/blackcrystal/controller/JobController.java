@@ -32,7 +32,7 @@ public class JobController {
 
     @ResponseBody
     @RequestMapping(value = "/job", method = RequestMethod.PUT)
-    public ResponseEntity put(@RequestBody JobConfig jobConfig) {
+    public ResponseEntity<?> put(@RequestBody JobConfig jobConfig) {
         if (jobService.jobExist(jobConfig)) {
             return jobService.update(jobConfig)
                     .map(j -> new ResponseEntity(j, HttpStatus.OK))

@@ -1,7 +1,7 @@
 package blackcrystal.service;
 
 import blackcrystal.model.JobConfig;
-import blackcrystal.runner.ScheduledTasks;
+import blackcrystal.runner.JobScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,7 @@ public class JobService {
     private JobConfigService jobConfigService;
 
     @Autowired
-    private ScheduledTasks scheduledTasks;
+    private JobScheduler scheduledTasks;
 
     public Optional<JobConfig> get(String name) {
         return this.getJobs().stream()
