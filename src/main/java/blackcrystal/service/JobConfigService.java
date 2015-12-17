@@ -71,11 +71,11 @@ public class JobConfigService {
 
 
     private Path getJobsDir() {
-        return Paths.get(properties.getWorkspace() + "/jobs");
+        return Paths.get(properties.getJobsDirectory());
     }
 
     private String getJobDir(String name) {
-        return properties.getWorkspace() + "/jobs/" + name;
+        return properties.getJobsDirectory() + "/" + name;
     }
 
     private Path getJobDirPath(String name) {
@@ -83,7 +83,7 @@ public class JobConfigService {
     }
 
     private Path getJobConfFile(String name) {
-        return Paths.get(properties.getWorkspace() + "/jobs/" + name + "/config.json");
+        return Paths.get(properties.getJobsDirectory() + "/" + name + "/config.json");
     }
 
 

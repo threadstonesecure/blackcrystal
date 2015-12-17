@@ -18,6 +18,10 @@ public class ApplicationProperties {
         return workspace;
     }
 
+    public String getJobsDirectory() {
+        return this.workspace+"/jobs";
+    }
+
     public void setWorkspace(String workspace) {
         this.workspace = workspace;
     }
