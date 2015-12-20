@@ -1,6 +1,7 @@
 package blackcrystal.runner;
 
 import blackcrystal.model.JobConfig;
+import blackcrystal.service.JobConfigService;
 import blackcrystal.service.JobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,9 @@ public class JobScheduler {
     @Autowired
     private JobService jobService;
 
+    @Autowired
+    private JobConfigService jobConfigService;
+
 
     @Bean
     private ThreadPoolTaskScheduler taskScheduler() {
@@ -37,6 +41,7 @@ public class JobScheduler {
 
     /**
      * Load all jobs on init, so all jobs will be scheduled immediately
+     *
      * @return true
      */
     @Bean
@@ -45,14 +50,16 @@ public class JobScheduler {
         return true;
     }
 
+
     /**
      * Add reference of Runner and ScheduledFuture.
      * This is needed for stopping the running process or canceling the schedule
+     *
      * @param jobConfig
      * @return
      */
     public boolean addJob(JobConfig jobConfig) {
-        Runner runner = new Runner(jobConfig);
+        Runner runner = new Runner(jobConfig, jobConfigService);
         ScheduledFuture scheduledFuture =
                 scheduler.schedule(runner, new CronTrigger(jobConfig.executionTime));
         threads.put(jobConfig.name, new JobThreadReference(runner, scheduledFuture));
@@ -75,7 +82,6 @@ public class JobScheduler {
         threads.remove(name);
         return true;
     }
-
 
 
 }

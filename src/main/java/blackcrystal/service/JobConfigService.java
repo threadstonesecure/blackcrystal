@@ -2,8 +2,9 @@ package blackcrystal.service;
 
 import blackcrystal.app.ApplicationProperties;
 import blackcrystal.model.JobConfig;
+import blackcrystal.model.JobExecutionInfo;
+import blackcrystal.model.JobExecutionResult;
 import blackcrystal.utility.FileUtility;
-import com.google.gson.Gson;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,20 +40,22 @@ public class JobConfigService {
         return jobs;
     }
 
-    public boolean write(JobConfig jobConfig) {
+    public boolean writeExecutionInfo(JobConfig jobConfig, JobExecutionInfo info) {
+        Path path = getJobExecutionInfo(jobConfig.name);
+        return FileUtility.write(path, info);
+    }
+
+    //TODO - correct naming
+    public boolean writeExecutionResult(JobConfig jobConfig, JobExecutionResult result, Integer buildid) {
+        Path path = getJobResultPath(jobConfig.name, buildid);
+        return FileUtility.write(path, result);
+    }
+
+    public boolean writeJobConfig(JobConfig jobConfig) {
         Path jobConfigFile = getJobConfFile(jobConfig.name);
-        String asJson = new Gson().toJson(jobConfig);
         Path jobDirectory = getJobDirPath(jobConfig.name);
-        try {
-            if (!Files.exists(jobDirectory)) {
-                Files.createDirectory(jobDirectory);
-            }
-            Files.write(jobConfigFile, asJson.getBytes());
-            return true;
-        } catch (Exception e) {
-            logger.debug("Could not write the job config file : " + jobConfig.name, e);
-            return false;
-        }
+        FileUtility.createDirectory(jobDirectory);
+        return FileUtility.write(jobConfigFile, jobConfig);
     }
 
     public boolean delete(String name) {
@@ -70,6 +73,26 @@ public class JobConfigService {
     }
 
 
+    public Integer getNextExecId(JobConfig jobConfig) {
+        Path path = getJobExecutionInfo(jobConfig.name);
+        JobExecutionInfo executionInfo = null;
+        if (Files.exists(path)) {
+            try {
+                executionInfo = FileUtility.getJobExecutionConfig(path.toString());
+            } catch (Exception e) {
+                logger.error("could not read the execution file ", e);
+            }
+        } else {
+            executionInfo = new JobExecutionInfo(0, new ArrayList<>());
+        }
+
+        Integer executionId = executionInfo.lastExecutionId + 1;
+        executionInfo.executions.add(executionId);
+        executionInfo.lastExecutionId = executionId;
+        this.writeExecutionInfo(jobConfig, executionInfo);
+        return executionId;
+    }
+
     private Path getJobsDir() {
         return Paths.get(properties.getJobsDirectory());
     }
@@ -82,8 +105,20 @@ public class JobConfigService {
         return Paths.get(getJobDir(name));
     }
 
+    public Path getJobBuildDirPath(String name, Integer jobid) {
+        return Paths.get(getJobDir(name) + "/" + jobid);
+    }
+
     private Path getJobConfFile(String name) {
         return Paths.get(properties.getJobsDirectory() + "/" + name + "/config.json");
+    }
+
+    private Path getJobExecutionInfo(String name) {
+        return Paths.get(properties.getJobsDirectory() + "/" + name + "/execution.json");
+    }
+
+    private Path getJobResultPath(String name, Integer buidlid) {
+        return Paths.get(properties.getJobsDirectory() + "/" + name + "/" + buidlid + "/result.json");
     }
 
 

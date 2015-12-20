@@ -35,7 +35,7 @@ public class JobService {
     }
 
     public Optional<JobConfig> update(JobConfig jobConfig) {
-        if (jobConfigService.write(jobConfig)) {
+        if (jobConfigService.writeJobConfig(jobConfig)) {
             jobs = jobs.stream()
                     .map(j -> j.name.equals(jobConfig.name) ? jobConfig : j)
                     .collect(Collectors.toList());
@@ -47,7 +47,7 @@ public class JobService {
     }
 
     public Optional<JobConfig> create(JobConfig jobConfig) {
-        if (jobConfigService.write(jobConfig)) {
+        if (jobConfigService.writeJobConfig(jobConfig)) {
             jobs.add(jobConfig);
             scheduledTasks.addJob(jobConfig);
             return get(jobConfig.name);
