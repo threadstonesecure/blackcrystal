@@ -6,15 +6,20 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("net.saliman:gradle-cobertura-plugin:2.0.0")
+        classpath("org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0")
     }
 }
+
 
 apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'cobertura'
 
 
 jar {
@@ -64,3 +69,6 @@ task wrapper(type: Wrapper) {
 processResources {
     expand(project.properties)
 }
+
+cobertura.coverageFormats = ['html', 'xml']
+

@@ -5,5 +5,9 @@ jdk:
 - oraclejdk8
 
 script:
-- gradle clean --info
-- gradle build --info
+- ./gradlew clean --info
+- ./gradlew build --info
+
+
+after_success:
+- ./gradlew cobertura coveralls
