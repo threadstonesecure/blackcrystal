@@ -10,4 +10,4 @@ script:
 
 
 after_success:
-- ./gradlew cobertura coveralls
+- ./gradlew jacocoTestReport coveralls
