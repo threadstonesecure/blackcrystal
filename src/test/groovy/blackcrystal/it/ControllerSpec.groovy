@@ -20,12 +20,15 @@ class ControllerSpec extends Specification {
     @Value('${local.server.port}')
     int port;
 
-    void "should return main page information"() {
+    void "should redirected to /ui/index.html"() {
         when:
         ResponseEntity entity = new RestTemplate().getForEntity("http://localhost:$port", String.class)
+        ResponseEntity entityUi = new RestTemplate().getForEntity("http://localhost:$port/ui", String.class)
         then:
         entity.statusCode == HttpStatus.OK
-        entity.body == 'In need of an UI!'
+        entityUi.statusCode == HttpStatus.OK
+        entity.body.contains("<!DOCTYPE html>") == true
+        entityUi.body.contains("<!DOCTYPE html>") == true
     }
 
 
