@@ -59,20 +59,28 @@ public class JobScheduler {
      * @return
      */
     public boolean addJob(JobConfig jobConfig) {
-        Runner runner = new Runner(jobConfig, jobConfigService);
-        ScheduledFuture scheduledFuture =
-                scheduler.schedule(runner, new CronTrigger(jobConfig.executionTime));
-        threads.put(jobConfig.name, new JobThreadReference(runner, scheduledFuture));
-        return true;
+        if(jobConfig.enabled){
+            Runner runner = new Runner(jobConfig, jobConfigService);
+            ScheduledFuture scheduledFuture =
+                    scheduler.schedule(runner, new CronTrigger(jobConfig.executionTime));
+            threads.put(jobConfig.name, new JobThreadReference(runner, scheduledFuture));
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public boolean updateJob(JobConfig jobConfig) {
-        JobThreadReference ref = threads.get(jobConfig.name);
-        //Cancel scheduler and add a new scheduler
-        ref.scheduledFuture.cancel(true);
-        ref.scheduledFuture = scheduler.schedule(ref.runner, new CronTrigger(jobConfig.executionTime));
-        threads.put(jobConfig.name, ref);
-        return true;
+        if(jobConfig.enabled){
+            JobThreadReference ref = threads.get(jobConfig.name);
+            //Cancel scheduler and add a new scheduler
+            ref.scheduledFuture.cancel(true);
+            ref.scheduledFuture = scheduler.schedule(ref.runner, new CronTrigger(jobConfig.executionTime));
+            threads.put(jobConfig.name, ref);
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public boolean deleteJob(String name) {

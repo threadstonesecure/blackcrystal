@@ -20,7 +20,7 @@ import java.util.List;
 @Component("jobConfigService")
 public class JobConfigService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ApplicationProperties.class);
+    private static final Logger logger = LoggerFactory.getLogger(JobConfigService.class);
 
     @Autowired
     private ApplicationProperties properties;

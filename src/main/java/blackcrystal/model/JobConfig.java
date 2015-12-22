@@ -12,6 +12,8 @@ public class JobConfig {
 
     public String executionTime;
 
+    public boolean enabled;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -19,6 +21,7 @@ public class JobConfig {
 
         JobConfig jobConfig = (JobConfig) o;
 
+        if (enabled != jobConfig.enabled) return false;
         if (command != null ? !command.equals(jobConfig.command) : jobConfig.command != null) return false;
         if (executionDirectory != null ? !executionDirectory.equals(jobConfig.executionDirectory) : jobConfig.executionDirectory != null)
             return false;

@@ -23,6 +23,7 @@ class TestUtils {
         jobConfig.name = "TestJob1"
         jobConfig.sourcePath = "/source/path"
         jobConfig.executionTime = "0 0/1 * * * ?"
+        jobConfig.enabled = false
         jobConfig
     }
 
@@ -34,6 +35,7 @@ class TestUtils {
         jobConfig.name = "TestJob2"
         jobConfig.sourcePath = "/source/path"
         jobConfig.executionTime = "0 0/1 * * * ?"
+        jobConfig.enabled = false
         jobConfig
     }
 
@@ -44,6 +46,7 @@ class TestUtils {
         jobConfig.name = "TestJob3"
         jobConfig.sourcePath = "/source/path"
         jobConfig.executionTime = "0 0/1 * * * ?"
+        jobConfig.enabled = false
         jobConfig
     }
 }

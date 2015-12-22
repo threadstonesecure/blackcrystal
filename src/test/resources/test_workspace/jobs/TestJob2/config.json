@@ -3,5 +3,6 @@
   "executionDirectory": "/execution/directory",
   "name": "TestJob2",
   "sourcePath": "/source/path",
-  "executionTime": "0 0/1 * * * ?"
+  "executionTime": "0 0/1 * * * ?",
+  "enabled": false
 }
