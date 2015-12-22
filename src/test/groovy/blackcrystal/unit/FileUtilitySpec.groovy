@@ -13,7 +13,7 @@ class FileUtilitySpec extends Specification {
 
     def "load file"() {
         when:
-        JobConfig jobConfig = FileUtility.getJobConfig(testUtils.seconfConfigFile);
+        JobConfig jobConfig = FileUtility.read(testUtils.seconfConfigFile, JobConfig.class);
         then:
         jobConfig != null
     }
@@ -21,7 +21,7 @@ class FileUtilitySpec extends Specification {
 
     def "parse job config correctly"() {
         when:
-        JobConfig jobConfig = FileUtility.getJobConfig(testUtils.seconfConfigFile);
+        JobConfig jobConfig = FileUtility.read(testUtils.seconfConfigFile, JobConfig.class);
         then:
         jobConfig.name == "TestJob2"
         jobConfig.executionDirectory == "/execution/directory"

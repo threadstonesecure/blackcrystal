@@ -4,12 +4,6 @@ language: java
 jdk:
 - oraclejdk8
 
-before_install:
-- npm install -g grunt grunt-cli gulp bower
-
-before_script:
-- cd static && npm install  && gulp install
-
 script:
 - ./gradlew clean --info
 - ./gradlew build --info

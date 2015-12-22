@@ -42,8 +42,8 @@ public class Runner implements Runnable, Callable {
     public void run() {
         LocalDateTime startTime = LocalDateTime.now();
         Process process = null;
-        Integer jobId = jobConfigService.getNextExecId(jobConfig);
-        Path jobBuildDir = jobConfigService.getJobBuildDirPath(jobConfig.name, jobId);
+        Integer executionId = jobConfigService.getNextExecId(jobConfig);
+        Path jobBuildDir = jobConfigService.getJobBuildDirPath(jobConfig.name, executionId.toString());
         FileUtility.createDirectory(jobBuildDir);
 
         try {
@@ -76,7 +76,7 @@ public class Runner implements Runnable, Callable {
         j.startTime = startTime.toString();
         j.endTime = endTime.toString();
         j.result = Integer.toString(process.exitValue());
-        jobConfigService.writeExecutionResult(jobConfig, j, jobId);
+        jobConfigService.writeExecutionResult(jobConfig, j, executionId.toString());
     }
 
     @Override

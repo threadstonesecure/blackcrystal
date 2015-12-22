@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +28,10 @@ public class JobConfigService {
     public List<JobConfig> loadJobs() {
         List<JobConfig> jobs = new ArrayList<>();
 
-        List<Path> directories = FileUtility.getSubDirectories(getJobsDir());
+        List<Path> directories = FileUtility.getSubDirectories(properties.jobsDirectory());
         for (Path p : directories) {
             try {
-                jobs.add(FileUtility.getJobConfig(p.toString() + "/config.json"));
+                jobs.add(FileUtility.read(p.resolve("config.json"), JobConfig.class));
             } catch (Exception e) {
                 logger.error("Could not load the jobs:" + p.toString(), e);
             }
@@ -46,21 +45,21 @@ public class JobConfigService {
     }
 
     //TODO - correct naming
-    public boolean writeExecutionResult(JobConfig jobConfig, JobExecutionResult result, Integer buildid) {
-        Path path = getJobResultPath(jobConfig.name, buildid);
+    public boolean writeExecutionResult(JobConfig jobConfig, JobExecutionResult result, String executionId) {
+        Path path = getJobResultPath(jobConfig.name, executionId);
         return FileUtility.write(path, result);
     }
 
     public boolean writeJobConfig(JobConfig jobConfig) {
         Path jobConfigFile = getJobConfFile(jobConfig.name);
-        Path jobDirectory = getJobDirPath(jobConfig.name);
+        Path jobDirectory = getJobDir(jobConfig.name);
         FileUtility.createDirectory(jobDirectory);
         return FileUtility.write(jobConfigFile, jobConfig);
     }
 
     public boolean delete(String name) {
         try {
-            FileUtils.deleteDirectory((new File(getJobDir(name))));
+            FileUtils.deleteDirectory((new File(getJobDir(name).toString())));
             return true;
         } catch (Exception e) {
             logger.debug("Could not delete the job config file : " + name, e);
@@ -78,7 +77,7 @@ public class JobConfigService {
         JobExecutionInfo executionInfo = null;
         if (Files.exists(path)) {
             try {
-                executionInfo = FileUtility.getJobExecutionConfig(path.toString());
+                executionInfo = FileUtility.read(path, JobExecutionInfo.class);
             } catch (Exception e) {
                 logger.error("could not read the execution file ", e);
             }
@@ -93,32 +92,27 @@ public class JobConfigService {
         return executionId;
     }
 
-    private Path getJobsDir() {
-        return Paths.get(properties.getJobsDirectory());
+
+    public Path getJobBuildDirPath(String name, String executionId) {
+        return getJobDir(name).resolve(executionId);
     }
 
-    private String getJobDir(String name) {
-        return properties.getJobsDirectory() + "/" + name;
-    }
 
-    private Path getJobDirPath(String name) {
-        return Paths.get(getJobDir(name));
-    }
-
-    public Path getJobBuildDirPath(String name, Integer jobid) {
-        return Paths.get(getJobDir(name) + "/" + jobid);
+    private Path getJobDir(String name) {
+        return properties.jobsDirectory().resolve(name);
     }
 
     private Path getJobConfFile(String name) {
-        return Paths.get(properties.getJobsDirectory() + "/" + name + "/config.json");
+        return getJobDir(name).resolve("config.json");
     }
 
     private Path getJobExecutionInfo(String name) {
-        return Paths.get(properties.getJobsDirectory() + "/" + name + "/execution.json");
+        return getJobDir(name).resolve("execution.json");
     }
 
-    private Path getJobResultPath(String name, Integer buidlid) {
-        return Paths.get(properties.getJobsDirectory() + "/" + name + "/" + buidlid + "/result.json");
+
+    private Path getJobResultPath(String name, String executionId) {
+        return getJobBuildDirPath(name, executionId).resolve("result.json");
     }
 
 

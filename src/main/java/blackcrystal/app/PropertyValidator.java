@@ -23,7 +23,7 @@ public class PropertyValidator implements Validator {
         if (properties.getWorkspace() != null && !Files.exists(Paths.get(properties.getWorkspace()))) {
             try {
                 Files.createDirectory(Paths.get(properties.getWorkspace()));
-                Files.createDirectory(Paths.get(properties.getJobsDirectory()));
+                Files.createDirectory(properties.jobsDirectory());
             } catch (IOException e) {
                 errors.rejectValue("workspace", "Can not create workspace directory, check permissions!");
             }

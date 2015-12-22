@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @Component
 @ConfigurationProperties(prefix = "blackcrystal")
 public class ApplicationProperties {
@@ -18,12 +21,13 @@ public class ApplicationProperties {
         return workspace;
     }
 
-    public String getJobsDirectory() {
-        return this.workspace+"/jobs";
+    public Path jobsDirectory() {
+        return Paths.get(this.workspace, "jobs");
     }
 
     public void setWorkspace(String workspace) {
         this.workspace = workspace;
+
     }
 
 }
