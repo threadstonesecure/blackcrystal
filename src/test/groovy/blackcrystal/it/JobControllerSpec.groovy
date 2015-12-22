@@ -25,7 +25,7 @@ import spock.lang.Stepwise
 class JobControllerSpec extends Specification {
 
 
-    Logger logger = LoggerFactory.getLogger(Specification.class);
+    Logger logger = LoggerFactory.getLogger(JobControllerSpec.class);
 
     @Value('${local.server.port}')
     int port;

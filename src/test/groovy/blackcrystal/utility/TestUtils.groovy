@@ -1,6 +1,7 @@
 package blackcrystal.utility
 
 import blackcrystal.model.JobConfig
+import blackcrystal.model.JobExecutionInfo
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -48,5 +49,9 @@ class TestUtils {
         jobConfig.executionTime = "0 0/1 * * * ?"
         jobConfig.enabled = false
         jobConfig
+    }
+
+    def  getExecutions(){
+        new JobExecutionInfo(30, [26,27,28,29,30])
     }
 }

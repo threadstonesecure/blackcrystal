@@ -1,6 +1,7 @@
 package blackcrystal.service;
 
 import blackcrystal.model.JobConfig;
+import blackcrystal.model.JobExecutionInfo;
 import blackcrystal.runner.JobScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,11 @@ public class JobService {
     @Autowired
     private JobConfigService jobConfigService;
 
+
+    @Autowired
+    private ExecutionService executionService;
+
+
     @Autowired
     private JobScheduler scheduledTasks;
 
@@ -25,6 +31,11 @@ public class JobService {
                 .filter(j -> j.name.equals(name))
                 .findFirst();
     }
+
+    public Optional<JobExecutionInfo> getExecutions(String name) {
+        return executionService.getExecutionInfo(name);
+    }
+    
 
 
     public List<JobConfig> getJobs() {
