@@ -84,11 +84,16 @@ public class JobScheduler {
     }
 
     public boolean deleteJob(String name) {
-        JobThreadReference ref = threads.get(name);
-        ref.runner.running = false;
-        ref.scheduledFuture.cancel(true);
-        threads.remove(name);
-        return true;
+        if(threads.containsKey(name)){
+            JobThreadReference ref = threads.get(name);
+            ref.runner.running = false;
+            ref.scheduledFuture.cancel(true);
+            threads.remove(name);
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
 

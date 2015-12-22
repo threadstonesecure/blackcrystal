@@ -16,12 +16,10 @@ import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
-import spock.lang.Stepwise
 
 @ContextConfiguration(loader = SpringApplicationContextLoader, classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest('server.port:0')
-@Stepwise
 class JobControllerSpec extends Specification {
 
 
@@ -80,6 +78,8 @@ class JobControllerSpec extends Specification {
     void "/job/{jobID} on PUT method if does not exist should return 201 - CREATED and add resource"() {
         given:
         def expectedConfig = testUtils.thirdTestConfig
+        RequestEntity deleteIfExist = RequestEntity.delete(serviceURI("/" + testUtils.thirdTestConfig.name)).build()
+        new RestTemplate().exchange(deleteIfExist, JobConfig)
         when:
         def request = RequestEntity.put(serviceURI()).body(expectedConfig)
         def response = new RestTemplate().exchange(request, JobConfig)
@@ -90,7 +90,7 @@ class JobControllerSpec extends Specification {
 
     void "/job/{jobID} on DELETE method, if resource exist, should return 202 - ACCEPTED"() {
         given:
-        RequestEntity request = RequestEntity.delete(serviceURI("/" + testUtils.thirdTestConfig.name)).build()
+        RequestEntity request = RequestEntity.delete(serviceURI("/" + testUtils.testJobForDeletion.name)).build()
         when:
         def response = new RestTemplate().exchange(request, JobConfig)
         then:

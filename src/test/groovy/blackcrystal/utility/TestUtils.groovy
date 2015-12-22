@@ -51,6 +51,18 @@ class TestUtils {
         jobConfig
     }
 
+
+    def getTestJobForDeletion(){
+        JobConfig jobConfig = new JobConfig()
+        jobConfig.command = "/execute/something"
+        jobConfig.executionDirectory = "/execution/directory"
+        jobConfig.name = "TestJobForDeletion"
+        jobConfig.sourcePath = "/source/path"
+        jobConfig.executionTime = "0 0/1 * * * ?"
+        jobConfig.enabled = false
+        jobConfig
+    }
+
     def  getExecutions(){
         new JobExecutionInfo(30, [26,27,28,29,30])
     }
