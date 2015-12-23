@@ -36,7 +36,7 @@ class FileUtilitySpec extends Specification {
         List<Path> directories = FileUtility.getSubDirectories(testUtils.jobsDirectory);
         then:
         directories != null
-        directories.size() == 2
+        directories.size() >= 2
     }
 
 

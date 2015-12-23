@@ -3,6 +3,7 @@ package blackcrystal.it
 import blackcrystal.Application
 import blackcrystal.model.JobConfig
 import blackcrystal.utility.TestUtils
+import org.apache.commons.io.FileUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -78,8 +79,8 @@ class JobControllerSpec extends Specification {
     void "/job/{jobID} on PUT method if does not exist should return 201 - CREATED and add resource"() {
         given:
         def expectedConfig = testUtils.thirdTestConfig
-        RequestEntity deleteIfExist = RequestEntity.delete(serviceURI("/" + testUtils.thirdTestConfig.name)).build()
-        new RestTemplate().exchange(deleteIfExist, JobConfig)
+        //Delete directory if exist before
+        FileUtils.deleteDirectory((new File(testUtils.jobsDirectory.resolve(expectedConfig.name).toString())));
         when:
         def request = RequestEntity.put(serviceURI()).body(expectedConfig)
         def response = new RestTemplate().exchange(request, JobConfig)
