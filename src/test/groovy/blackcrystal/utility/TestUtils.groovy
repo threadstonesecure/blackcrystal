@@ -2,6 +2,7 @@ package blackcrystal.utility
 
 import blackcrystal.model.JobConfig
 import blackcrystal.model.JobExecutionInfo
+import blackcrystal.model.JobExecutionResult
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -65,5 +66,10 @@ class TestUtils {
 
     def  getExecutions(){
         new JobExecutionInfo(30, [26,27,28,29,30])
+    }
+
+
+    def  getExecutionResult(){
+        new JobExecutionResult("2015-12-21T21:09:00.010","2015-12-21T21:09:10.544","10","3")
     }
 }

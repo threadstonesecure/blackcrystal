@@ -2,6 +2,7 @@ package blackcrystal.it
 
 import blackcrystal.Application
 import blackcrystal.model.JobExecutionInfo
+import blackcrystal.model.JobExecutionResult
 import blackcrystal.utility.TestUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -12,7 +13,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.RequestEntity
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.web.WebAppConfiguration
-import org.springframework.web.client.HttpServerErrorException
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 
@@ -46,24 +47,47 @@ class ExecutionControllerSpec extends Specification {
         def request = RequestEntity.get(serviceURI("$jobId/executions")).build()
         def response = new RestTemplate().exchange(request, JobExecutionInfo)
         then:
-        response.body.executions.size() == expectedJExecutionInfo.executions.size()
-        response.body.lastExecutionId == expectedJExecutionInfo.lastExecutionId
+        response.body == expectedJExecutionInfo
         response.statusCode == HttpStatus.OK
     }
 
 
-    void "/job/{name}/execution/{executionId}  should return NOT_IMPLEMENTED"() {
+    void "/job/{name}/execution/{executionId} should return execution result"() {
+        given:
+        def expectedExecutionResult = testUtils.executionResult
         when:
-        new RestTemplate().getForEntity(serviceURI("$jobId/execution/30"), String.class)
+        def request = RequestEntity.get(serviceURI("$jobId/execution/30")).build()
+        def response = new RestTemplate().exchange(request, JobExecutionResult)
         then:
-        thrown HttpServerErrorException
+        response.body == expectedExecutionResult
+        response.statusCode == HttpStatus.OK
     }
 
-    void "/job/{name}/execution/{executionId}/log should return NOT_IMPLEMENTED"() {
+    void "/job/{name}/execution/{executionId} 404 - NOT_FOUND if execution does not exist"() {
         when:
-        new RestTemplate().getForEntity(serviceURI("$jobId/execution/30/log"), String.class)
+        def request = RequestEntity.get(serviceURI("$jobId/execution/1000")).build()
+        new RestTemplate().exchange(request, JobExecutionResult)
         then:
-        thrown HttpServerErrorException
+        HttpClientErrorException exception = thrown()
+        exception.statusCode == HttpStatus.NOT_FOUND
+    }
+
+    void "/job/{name}/execution/{executionId}/log should return execution log"() {
+        when:
+        def request = RequestEntity.get(serviceURI("$jobId/execution/30/log")).build()
+        def response = new RestTemplate().exchange(request, String)
+        then:
+        response.body.contains("This is sample output...\nThis is sample output...") == true
+        response.statusCode == HttpStatus.OK
+    }
+
+    void "/job/{name}/execution/{executionId}/log should return 404 - NOT_FOUND if execution does not exist"() {
+        when:
+        def request = RequestEntity.get(serviceURI("$jobId/execution/1000/log")).build()
+        new RestTemplate().exchange(request, String)
+        then:
+        HttpClientErrorException exception = thrown()
+        exception.statusCode == HttpStatus.NOT_FOUND
     }
 
 }
