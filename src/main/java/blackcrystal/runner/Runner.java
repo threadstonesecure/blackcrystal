@@ -2,6 +2,8 @@ package blackcrystal.runner;
 
 import blackcrystal.model.JobConfig;
 import blackcrystal.model.JobExecutionResult;
+import blackcrystal.service.DirectoryService;
+import blackcrystal.service.ExecutionService;
 import blackcrystal.service.JobConfigService;
 import blackcrystal.utility.FileUtility;
 import org.slf4j.Logger;
@@ -26,15 +28,21 @@ public class Runner implements Runnable, Callable {
 
     private JobConfigService jobConfigService;
 
+    private ExecutionService executionService;
+
+    private DirectoryService directoryService;
+
     public boolean running = true;
 
     public Runner() {
     }
 
     //TODO : Temporary Solution - do not pass the reference of JobConfigService here
-    public Runner(JobConfig jobConfig, JobConfigService jobConfigService) {
+    public Runner(JobConfig jobConfig, JobConfigService jobConfigService, ExecutionService executionService, DirectoryService directoryService) {
         this.jobConfig = jobConfig;
         this.jobConfigService = jobConfigService;
+        this.executionService = executionService;
+        this.directoryService = directoryService;
     }
 
 
@@ -42,15 +50,17 @@ public class Runner implements Runnable, Callable {
     public void run() {
         LocalDateTime startTime = LocalDateTime.now();
         Process process = null;
-        Integer executionId = jobConfigService.getNextExecId(jobConfig);
-        Path jobBuildDir = jobConfigService.getJobBuildDirPath(jobConfig.name, executionId.toString());
-        FileUtility.createDirectory(jobBuildDir);
+        Integer executionId = executionService.getNextExecId(jobConfig);
+        Path executionDirectory = directoryService.executionDirectory(jobConfig.name, executionId.toString());
+        Path executionLog = directoryService.executionLog(jobConfig.name, executionId.toString());
+
+        FileUtility.createDirectory(executionDirectory);
 
         try {
             ProcessBuilder pb = new ProcessBuilder(jobConfig.command.split(" "));
             //Map<String, String> env = pb.environment();
             //env.put("jobid", jobid);
-            File log = new File(jobBuildDir.toString() + "/log");
+            File log = new File(executionLog.toString());
             pb.directory(new File(jobConfig.executionDirectory));
             pb.redirectErrorStream(true);
             pb.redirectOutput(ProcessBuilder.Redirect.appendTo(log));

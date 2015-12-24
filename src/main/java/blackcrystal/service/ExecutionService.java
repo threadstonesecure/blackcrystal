@@ -1,6 +1,6 @@
 package blackcrystal.service;
 
-import blackcrystal.app.ApplicationProperties;
+import blackcrystal.model.JobConfig;
 import blackcrystal.model.JobExecutionInfo;
 import blackcrystal.model.JobExecutionResult;
 import blackcrystal.utility.FileUtility;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Component("executionService")
@@ -19,11 +20,11 @@ public class ExecutionService {
     private static final Logger logger = LoggerFactory.getLogger(ExecutionService.class);
 
     @Autowired
-    private ApplicationProperties properties;
+    private DirectoryService directoryService;
 
 
     public Optional<JobExecutionInfo> getExecutionInfo(String name) {
-        Path path = getJobExecutionInfo(name);
+        Path path = directoryService.executionFile(name);
         if (Files.exists(path)) {
             try {
                 return Optional.of(FileUtility.read(path, JobExecutionInfo.class));
@@ -35,7 +36,7 @@ public class ExecutionService {
     }
 
     public Optional<JobExecutionResult> getExecutionResult(String name, Integer executionId) {
-        Path path = getJobResultPath(name, executionId.toString());
+        Path path = directoryService.executionResultFile(name, executionId.toString());
         if (Files.exists(path)) {
             try {
                 return Optional.of(FileUtility.read(path, JobExecutionResult.class));
@@ -47,7 +48,7 @@ public class ExecutionService {
     }
 
     public Optional<Path> getExecutionLogPath(String name, Integer executionId) {
-        Path path = getJobBuildDirPath(name, executionId.toString()).resolve("log");
+        Path path = directoryService.executionLog(name, executionId.toString());
         if (Files.exists(path)) {
             return Optional.of(path);
         }
@@ -55,23 +56,30 @@ public class ExecutionService {
     }
 
 
-    //TODO : Remove duplicated codes between services
-    private Path getJobDir(String name) {
-        return properties.jobsDirectory().resolve(name);
+    public Integer getNextExecId(JobConfig jobConfig) {
+        Path path = directoryService.executionFile(jobConfig.name);
+        JobExecutionInfo executionInfo = null;
+        if (Files.exists(path)) {
+            try {
+                executionInfo = FileUtility.read(path, JobExecutionInfo.class);
+            } catch (Exception e) {
+                logger.error("could not read the execution file ", e);
+            }
+        } else {
+            executionInfo = new JobExecutionInfo(0, new ArrayList<>());
+        }
+
+        Integer executionId = executionInfo.lastExecutionId + 1;
+        executionInfo.executions.add(executionId);
+        executionInfo.lastExecutionId = executionId;
+        this.writeExecutionInfo(jobConfig, executionInfo);
+        return executionId;
     }
 
-
-    private Path getJobExecutionInfo(String name) {
-        return getJobDir(name).resolve("execution.json");
+    public boolean writeExecutionInfo(JobConfig jobConfig, JobExecutionInfo info) {
+        Path path = directoryService.executionFile(jobConfig.name);
+        return FileUtility.write(path, info);
     }
 
-    public Path getJobBuildDirPath(String name, String executionId) {
-        return getJobDir(name).resolve(executionId);
-    }
-
-
-    private Path getJobResultPath(String name, String executionId) {
-        return getJobBuildDirPath(name, executionId).resolve("result.json");
-    }
 
 }

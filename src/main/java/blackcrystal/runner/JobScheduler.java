@@ -1,6 +1,8 @@
 package blackcrystal.runner;
 
 import blackcrystal.model.JobConfig;
+import blackcrystal.service.DirectoryService;
+import blackcrystal.service.ExecutionService;
 import blackcrystal.service.JobConfigService;
 import blackcrystal.service.JobService;
 import org.slf4j.Logger;
@@ -31,6 +33,12 @@ public class JobScheduler {
     @Autowired
     private JobConfigService jobConfigService;
 
+    @Autowired
+    private ExecutionService executionService;
+
+    @Autowired
+    private DirectoryService directoryService;
+
 
     @Bean
     private ThreadPoolTaskScheduler taskScheduler() {
@@ -60,7 +68,7 @@ public class JobScheduler {
      */
     public boolean addJob(JobConfig jobConfig) {
         if(jobConfig.enabled){
-            Runner runner = new Runner(jobConfig, jobConfigService);
+            Runner runner = new Runner(jobConfig, jobConfigService, executionService, directoryService);
             ScheduledFuture scheduledFuture =
                     scheduler.schedule(runner, new CronTrigger(jobConfig.executionTime));
             threads.put(jobConfig.name, new JobThreadReference(runner, scheduledFuture));
