@@ -3,7 +3,8 @@ import React from 'react';
 import NavMain from './NavMain';
 import PageHeader from './PageHeader';
 import PageFooter from './PageFooter';
-var $ = require('jquery');
+import {Button, Glyphicon} from 'react-bootstrap';
+import $ from 'jquery';
 
 var View1Table = React.createClass({
   render: function() {
@@ -11,8 +12,8 @@ var View1Table = React.createClass({
       <table className="table table-bordered table-hover table-condensed">
         <thead>
           <tr>      
-            <th>ID</th>
-            <th>Status</th>
+            <th>Name</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -30,8 +31,13 @@ var View1Row = React.createClass({
   render: function() {
     return (
       <tr>
-        <td><a href={"#job/" + this.props.data.name}>{this.props.data.name}</a></td>
         <td>{this.props.data.name}</td>
+        <td>
+          <Button  bsStyle="link" href={"/job/" + this.props.data.name}>
+            <Glyphicon glyph="edit" />
+            Edit
+          </Button>
+        </td>
       </tr>
     );
   }
@@ -56,7 +62,6 @@ const Jobs = React.createClass({
         }
     }.bind(this))     
   },
-
   render() {
     return (
       <div>

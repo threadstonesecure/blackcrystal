@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.web.WebAppConfiguration
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 
@@ -20,15 +21,16 @@ class ControllerSpec extends Specification {
     @Value('${local.server.port}')
     int port;
 
-    void "should redirected to /ui/index.html"() {
+    void "redirection should respond 404 as front-end is not available"() {
         when:
         ResponseEntity entity = new RestTemplate().getForEntity("http://localhost:$port", String.class)
         ResponseEntity entityUi = new RestTemplate().getForEntity("http://localhost:$port/ui", String.class)
         then:
-        entity.statusCode == HttpStatus.OK
-        entityUi.statusCode == HttpStatus.OK
-        entity.body.contains("<!DOCTYPE html>") == true
-        entityUi.body.contains("<!DOCTYPE html>") == true
+        thrown HttpClientErrorException
+       // entity.statusCode == HttpStatus.NOT_FOUND
+        //entityUi.statusCode == HttpStatus.NOT_FOUND
+        //entity.body.contains("<!DOCTYPE html>") == true
+        //entityUi.body.contains("<!DOCTYPE html>") == true
     }
 
 
