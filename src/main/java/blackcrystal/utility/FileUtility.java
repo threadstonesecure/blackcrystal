@@ -1,12 +1,10 @@
 package blackcrystal.utility;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -19,10 +17,8 @@ public class FileUtility {
 
     private static final Logger logger = LoggerFactory.getLogger(FileUtility.class);
 
-    public static <T> T read(Path path, Class<T> valueType) throws IOException, JsonMappingException, JsonParseException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        byte[] jsonData = Files.readAllBytes(path);
-        return objectMapper.readValue(jsonData, valueType);
+    public static <T> T read(Path path, Class<T> valueType) throws IOException {
+        return new Gson().fromJson(new FileReader(path.toFile()), valueType);
     }
 
 
