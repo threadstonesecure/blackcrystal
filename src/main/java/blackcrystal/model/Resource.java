@@ -4,7 +4,7 @@ public class Resource {
 
     public String name;
 
-    public String type;
+    public ResourceType type;
 
     public String version;
 
@@ -18,7 +18,7 @@ public class Resource {
         Resource resource = (Resource) o;
 
         if (name != null ? !name.equals(resource.name) : resource.name != null) return false;
-        if (type != null ? !type.equals(resource.type) : resource.type != null) return false;
+        if (type != resource.type) return false;
         if (version != null ? !version.equals(resource.version) : resource.version != null) return false;
         return !(repository != null ? !repository.equals(resource.repository) : resource.repository != null);
 

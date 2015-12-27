@@ -33,13 +33,23 @@ class ResourceControllerSpec extends Specification {
         new URI("http://localhost:$port/${basePath}${path}")
     }
 
-    void "/resources should return NOT_IMPLEMENTED"() {
+    void "/resources should return list of created resources"() {
         when:
         def request = RequestEntity.get(new URI("http://localhost:$port/resources")).build()
         def response = new RestTemplate().exchange(request, List)
         then:
         response.statusCode == HttpStatus.OK
         response.body.each { assert it.name.contains("TestResource") }
+    }
+
+
+    void "/resource-types should returns all supported resource types"() {
+        when:
+        def request = RequestEntity.get(new URI("http://localhost:$port/resource-types")).build()
+        def response = new RestTemplate().exchange(request, String)
+        then:
+        response.statusCode == HttpStatus.OK
+        response.body == "[\"git\",\"directory\"]"
     }
 
     void "/resource/:name should return NOT_IMPLEMENTED for delete request"() {

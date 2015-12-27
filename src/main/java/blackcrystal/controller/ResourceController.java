@@ -1,5 +1,6 @@
 package blackcrystal.controller;
 
+import blackcrystal.model.ResourceType;
 import blackcrystal.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,8 +19,19 @@ public class ResourceController {
 
     @ResponseBody
     @RequestMapping(value = "/resources", method = RequestMethod.GET)
-    public ResponseEntity getAll() {
+    public ResponseEntity<?> getAll() {
         return new ResponseEntity(resourceService.loadResources(), HttpStatus.OK);
+    }
+
+
+    /**
+     * Return supported resource-types
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/resource-types", method = RequestMethod.GET)
+    public ResponseEntity<?> types() {
+        return new ResponseEntity(ResourceType.values(), HttpStatus.OK);
     }
 
 
