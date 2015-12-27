@@ -25,6 +25,14 @@ public class DirectoryService {
     }
 
     /**
+     * ./workspace/resources
+     * @return
+     */
+    public Path resourcesDirectory(){
+        return properties.resourcesDirectory();
+    }
+
+    /**
      * ./workspace/jobs/job_name
      * @return
      */

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.IntegrationTest
 import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.http.HttpStatus
 import org.springframework.http.RequestEntity
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.web.WebAppConfiguration
@@ -34,9 +35,11 @@ class ResourceControllerSpec extends Specification {
 
     void "/resources should return NOT_IMPLEMENTED"() {
         when:
-        new RestTemplate().getForEntity(new URI("http://localhost:$port/resources"), String.class)
+        def request = RequestEntity.get(new URI("http://localhost:$port/resources")).build()
+        def response = new RestTemplate().exchange(request, List)
         then:
-        thrown HttpServerErrorException
+        response.statusCode == HttpStatus.OK
+        response.body.each { assert it.name.contains("TestResource") }
     }
 
     void "/resource/:name should return NOT_IMPLEMENTED for delete request"() {

@@ -1,0 +1,6 @@
+{
+  "name": "TestResource2",
+  "type": "git",
+  "version": "master",
+  "repository": "https://github.com/username/reponame.git"
+}

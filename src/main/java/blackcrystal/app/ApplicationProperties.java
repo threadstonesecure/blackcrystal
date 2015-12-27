@@ -25,6 +25,10 @@ public class ApplicationProperties {
         return Paths.get(this.workspace, "jobs");
     }
 
+    public Path resourcesDirectory() {
+        return Paths.get(this.workspace, "resources");
+    }
+
     public void setWorkspace(String workspace) {
         this.workspace = workspace;
 

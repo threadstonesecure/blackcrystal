@@ -1,5 +1,7 @@
 package blackcrystal.controller;
 
+import blackcrystal.service.ResourceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,10 +13,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ResourceController {
 
+    @Autowired
+    private ResourceService resourceService;
+
     @ResponseBody
     @RequestMapping(value = "/resources", method = RequestMethod.GET)
     public ResponseEntity getAll() {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity(resourceService.loadResources(), HttpStatus.OK);
     }
 
 
