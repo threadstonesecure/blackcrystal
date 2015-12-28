@@ -7,9 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component("resourceService")
 public class ResourceService {
@@ -32,6 +34,37 @@ public class ResourceService {
             }
         }
         return resources;
+    }
+
+
+    public boolean writeResourceConfig(Resource resource) {
+        Path resourceConfigFile = directoryService.resourceConfigFile(resource.name);
+        Path resourceDirectory = directoryService.resourceDirectory(resource.name);
+        FileUtility.createDirectory(resourceDirectory);
+        return FileUtility.write(resourceConfigFile, resource);
+    }
+
+
+    //TODO : add new resource to scheduling process
+    public Optional<Resource> update(Resource resource) {
+        if (writeResourceConfig(resource)) {
+            return Optional.of(resource);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    //TODO : add new resource to scheduling process
+    public Optional<Resource> create(Resource resource) {
+        if (writeResourceConfig(resource)) {
+            return Optional.of(resource);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public boolean resourceExist(Resource resource) {
+        return Files.exists(directoryService.resourceDirectory(resource.name));
     }
 
 }

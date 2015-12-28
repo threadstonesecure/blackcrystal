@@ -1,15 +1,13 @@
 package blackcrystal.controller;
 
+import blackcrystal.model.Resource;
 import blackcrystal.model.ResourceType;
 import blackcrystal.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class ResourceController {
@@ -26,6 +24,7 @@ public class ResourceController {
 
     /**
      * Return supported resource-types
+     *
      * @return
      */
     @ResponseBody
@@ -37,8 +36,16 @@ public class ResourceController {
 
     @ResponseBody
     @RequestMapping(value = "/resource", method = RequestMethod.PUT)
-    public ResponseEntity put(@PathVariable String name) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<?> put(@RequestBody Resource resource) {
+        if (resourceService.resourceExist(resource)) {
+            return resourceService.update(resource)
+                    .map(r -> new ResponseEntity(r, HttpStatus.OK))
+                    .orElse(new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR));
+        } else {
+            return resourceService.create(resource)
+                    .map(r -> new ResponseEntity(r, HttpStatus.CREATED))
+                    .orElse(new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR));
+        }
     }
 
 

@@ -18,31 +18,57 @@ public class DirectoryService {
 
     /**
      * ./workspace/jobs
+     *
      * @return
      */
-    public Path jobsDirectory(){
+    public Path jobsDirectory() {
         return properties.jobsDirectory();
     }
 
     /**
      * ./workspace/resources
+     *
      * @return
      */
-    public Path resourcesDirectory(){
+    public Path resourcesDirectory() {
         return properties.resourcesDirectory();
     }
 
+
     /**
-     * ./workspace/jobs/job_name
+     * ./workspace/resource/resource_name/config.json
+     *
+     * @param name
      * @return
      */
-    public Path jobDirectory(String name){
+    public Path resourceConfigFile(String name) {
+        return resourceDirectory(name).resolve("config.json");
+    }
+
+
+    /**
+     * ./workspace/resource/resource_name
+     *
+     * @return
+     */
+    public Path resourceDirectory(String name) {
+        return this.resourcesDirectory().resolve(name);
+    }
+
+
+    /**
+     * ./workspace/jobs/job_name
+     *
+     * @return
+     */
+    public Path jobDirectory(String name) {
         return this.jobsDirectory().resolve(name);
     }
 
 
     /**
      * ./workspace/jobs/job_name/config.json
+     *
      * @param name
      * @return
      */
@@ -52,6 +78,7 @@ public class DirectoryService {
 
     /**
      * ./workspace/jobs/job_name/execution.json
+     *
      * @param name
      * @return
      */
@@ -61,6 +88,7 @@ public class DirectoryService {
 
     /**
      * ./workspace/jobs/job_name/execution_id
+     *
      * @param name
      * @param executionId
      * @return
@@ -72,6 +100,7 @@ public class DirectoryService {
 
     /**
      * ./workspace/jobs/job_name/execution_id/result.json
+     *
      * @param name
      * @param executionId
      * @return
@@ -83,6 +112,7 @@ public class DirectoryService {
 
     /**
      * ./workspace/jobs/job_name/execution_id/log
+     *
      * @param name
      * @param executionId
      * @return

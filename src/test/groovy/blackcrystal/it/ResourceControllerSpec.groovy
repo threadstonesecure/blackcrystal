@@ -1,6 +1,9 @@
 package blackcrystal.it
 
 import blackcrystal.Application
+import blackcrystal.model.JobConfig
+import blackcrystal.model.Resource
+import blackcrystal.utility.TestUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -18,6 +21,8 @@ import spock.lang.Specification
 @WebAppConfiguration
 @IntegrationTest('server.port:0')
 class ResourceControllerSpec extends Specification {
+
+    TestUtils testUtils = new TestUtils()
 
 
     Logger logger = LoggerFactory.getLogger(ResourceControllerSpec.class);
@@ -70,13 +75,24 @@ class ResourceControllerSpec extends Specification {
         thrown HttpServerErrorException
     }
 
-    void "/resource/:name should return NOT_IMPLEMENTED for put request"() {
+    void "/resource should return CREATED for PUT request if resource does not exist"() {
         given:
-        RequestEntity request = RequestEntity.put(serviceURI("")).build()
+        def config = testUtils.resourceConfig
         when:
-        new RestTemplate().exchange(request, String)
+        def request = RequestEntity.put(serviceURI()).body(config)
+        def response = new RestTemplate().exchange(request, Resource)
         then:
-        thrown HttpServerErrorException
+        response.statusCode == HttpStatus.CREATED
+    }
+
+    void "/resource should return CREATED for OK request if resource exist"() {
+        given:
+        def config = testUtils.resourceConfig2
+        when:
+        def request = RequestEntity.put(serviceURI()).body(config)
+        def response = new RestTemplate().exchange(request, Resource)
+        then:
+        response.statusCode == HttpStatus.OK
     }
 
 

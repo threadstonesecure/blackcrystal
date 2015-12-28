@@ -3,6 +3,8 @@ package blackcrystal.utility
 import blackcrystal.model.JobConfig
 import blackcrystal.model.JobExecutionInfo
 import blackcrystal.model.JobExecutionResult
+import blackcrystal.model.Resource
+import blackcrystal.model.ResourceType
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -71,5 +73,24 @@ class TestUtils {
 
     def  getExecutionResult(){
         new JobExecutionResult("2015-12-21T21:09:00.010","2015-12-21T21:09:10.544","10","3")
+    }
+
+
+    def getResourceConfig(){
+        Resource resource = new Resource()
+        resource.repository = "http://"
+        resource.type = ResourceType.GIT
+        resource.name = "TestResource3"
+        resource.version = "master"
+        resource
+    }
+
+    def getResourceConfig2(){
+        Resource resource = new Resource()
+        resource.repository = "http://"
+        resource.type = ResourceType.GIT
+        resource.name = "TestResource1"
+        resource.version = "master"
+        resource
     }
 }
