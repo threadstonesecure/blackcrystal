@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
 import {Router} from 'react-router';
 
 import Root from './src/Root';
-import routes from './src/Routes';
+import routes from './src/components/navigation/Routes';
 
 import 'bootstrap/less/bootstrap.less';
 

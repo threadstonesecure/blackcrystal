@@ -1,6 +1,6 @@
 import React from 'react';
 
-import NavMain from './NavMain';
+import NavMain from './navigation/NavMain';
 import PageFooter from './PageFooter';
 import PageHeader from './PageHeader';
 import { Grid } from 'react-bootstrap';

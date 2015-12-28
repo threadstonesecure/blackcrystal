@@ -1,8 +1,8 @@
 import React from 'react';
 
-import NavMain from './NavMain';
-import PageHeader from './PageHeader';
-import PageFooter from './PageFooter';
+import NavMain from './../navigation/NavMain';
+import PageHeader from './../PageHeader';
+import PageFooter from './../PageFooter';
 import { Input } from 'react-bootstrap';
 import $ from 'jquery';
 

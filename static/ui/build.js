@@ -7,7 +7,7 @@ import ReactDOMServer from 'react-dom/server';
 import {match, RoutingContext} from 'react-router';
 
 import Root from './src/Root';
-import routes from './src/Routes';
+import routes from './src/components/navigation/Routes';
 
 import metadata from './generate-metadata';
 

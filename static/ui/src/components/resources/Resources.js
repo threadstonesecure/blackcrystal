@@ -1,8 +1,8 @@
 import React from 'react';
 
-import NavMain from './NavMain';
-import PageHeader from './PageHeader';
-import PageFooter from './PageFooter';
+import NavMain from '../navigation/NavMain';
+import PageHeader from '../PageHeader';
+import PageFooter from '../PageFooter';
 import {Button, Alert,Grid,Row,Col,Navbar,Nav,NavDropdown,MenuItem,NavItem, Glyphicon} from 'react-bootstrap';
 import $ from 'jquery';
 
@@ -46,15 +46,15 @@ var View1Row = React.createClass({
             <tr>
                 <td>{this.props.data.name}</td>
                 <td>
-                    <Button bsStyle="link" href={"/job/" + this.props.data.name}>
+                    <Button bsStyle="link" href="#">
                         <Glyphicon glyph="edit"/>
                         Edit
                     </Button>
                 </td>
                 <td>
-                    <Button bsStyle="link" href={"/job/" + this.props.data.name +"/executions"}>
-                        <Glyphicon glyph="tasks"/>
-                        Executions
+                    <Button bsStyle="link" href="#">
+                        <Glyphicon glyph="remove"/>
+                        Delete
                     </Button>
                 </td>
             </tr>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import NavMain from './NavMain';
+import NavMain from './navigation/NavMain';
 import PageHeader from './PageHeader';
 import PageFooter from './PageFooter';
 
