@@ -13,7 +13,7 @@ const NAV_LINKS = {
     title: 'Jobs'
   },
   'resources': {
-    link: '/resources.html',
+    link: '/resources',
     title: 'Resources'
   },
   'diagnostic': {
