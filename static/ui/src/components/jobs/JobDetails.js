@@ -3,59 +3,103 @@ import React from 'react';
 import NavMain from './../navigation/NavMain';
 import PageHeader from './../PageHeader';
 import PageFooter from './../PageFooter';
-import { Input } from 'react-bootstrap';
+import { Input, Row, Col, Grid, Button } from 'react-bootstrap';
+import LinkedStateMixin from 'react-addons-linked-state-mixin';
+
 import $ from 'jquery';
 
 
 const JobDetails = React.createClass({
-  loadData() {
-      return $.getJSON("http://localhost:8080/job/"+this.props.params.name);
-  },
-  getInitialState() {
-    return { data: [] };
-  },
+    mixins: [LinkedStateMixin],
 
-  componentDidMount(){
-    this.loadData().success(function (data) {
-        if(this.isMounted())
-        {
-            this.setState({data: data});
-        }
-    }.bind(this))     
-  },
+    save(event){
+        this.put(this.state);
+    },
 
-  render() {
-    return (
-      <div>
-        <NavMain activePage="jobs" />
+    put(data) {
+        var request = $.ajax({
+            type: "PUT",
+            url: "http://localhost:8080/job",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            dataType: "json"
+        });
 
-        <PageHeader title={this.props.params.name} />
+        request.done(function (msg) {
+            //TODO use react-router transitionTo
+            $(location).attr('href', '../jobs')
+        });
 
-        <div className="container bs-docs-container">
-          <Input type="text" value={this.state.data.name} 
-          placeholder="Name of the job"
-          label="Name of the job"  />
+        request.fail(function (jqXHR, msg) {
+            console.log("Request failed: " + msg);
+        });
 
-           <Input type="checkbox" value={this.state.data.enabled} 
-          label="Enabled"  />
+    },
 
-          <Input type="text" value={this.state.data.executionDirectory} 
-          placeholder="Execution Directory"
-          label="Execution Directory"  />
+    loadData() {
+        return $.getJSON("http://localhost:8080/job/" + this.props.params.name);
+    },
 
-          <Input type="text" value={this.state.data.sourcePath} 
-          placeholder="Resource"
-          label="Resource"  />
+    getInitialState() {
+        return {data: []};
+    },
 
-          <Input type="text" value={this.state.data.executionTime} 
-          placeholder="Execution Time"
-          label="Execution Time"  />
+    componentDidMount(){
+        this.loadData().success(function (data) {
+            if (this.isMounted()) {
+                this.setState(data);
+            }
+        }.bind(this))
+    },
 
-        </div>
-        <PageFooter />
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div>
+                <NavMain activePage="jobs"/>
+                <PageHeader title={this.props.params.name}/>
+                <Grid>
+                    <Row>
+                        <Input type="text" valueLink={this.linkState('name')}
+                               placeholder="Name of the job"
+                               label="Name of the job"/>
+                    </Row>
+
+                    <Row>
+                        <Input type="checkbox" checkedLink={this.linkState('enabled')}
+                               label="Enabled"/>
+                    </Row>
+
+                    <Row>
+                        <Input type="text"
+                               valueLink={this.linkState('executionDirectory')}
+                               placeholder="Execution Directory"
+                               label="Execution Directory"/>
+                    </Row>
+
+                    <Row>
+                        <Input type="text"
+                               valueLink={this.linkState('sourcePath')}
+                               placeholder="Resource"
+                               label="Resource"/>
+                    </Row>
+
+                    <Row>
+                        <Input type="text"
+                               valueLink={this.linkState('executionTime')}
+                               placeholder="Execution Time"
+                               label="Execution Time"/>
+                    </Row>
+
+                    <Row>
+                        <Col xsOffset={11}>
+                            <Button bsStyle="primary" onClick={this.save}>Save</Button>
+                        </Col>
+                    </Row>
+                </Grid>
+                <PageFooter />
+            </div>
+        );
+    }
 });
 
 export default JobDetails;

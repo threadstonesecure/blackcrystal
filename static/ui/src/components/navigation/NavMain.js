@@ -9,7 +9,7 @@ const NAV_LINKS = {
     title: 'Overview'
   },
   'jobs': {
-    link: '/jobs.html',
+    link: '/jobs',
     title: 'Jobs'
   },
   'resources': {

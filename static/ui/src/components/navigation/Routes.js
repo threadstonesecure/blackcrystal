@@ -12,7 +12,7 @@ import Root from './../../Root';
 export default (
   <Route path="/" component={Root}>
     <IndexRoute component={HomePage} />
-    <Route path="jobs.html" component={Jobs} />
+    <Route path="jobs" component={Jobs} />
     <Route path="resources" component={Resources} />
     <Route path="new/resource" component={Resource} />
     <Route path="job/:name" component={JobDetails} />

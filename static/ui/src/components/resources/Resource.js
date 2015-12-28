@@ -12,7 +12,6 @@ import $ from 'jquery';
 const Resource = React.createClass({
     mixins: [LinkedStateMixin],
     save(event){
-        this.state
         var resource = this.refs.resourceType.collect()
         resource.name = this.state.name;
         this.put(resource);
