@@ -25,7 +25,7 @@ class FileUtilitySpec extends Specification {
         then:
         jobConfig.name == "TestJob2"
         jobConfig.executionDirectory == "/execution/directory"
-        jobConfig.sourcePath == "/source/path"
+        jobConfig.resourceName == "/source/path"
         jobConfig.executionTime == "0 0/1 * * * ?"
         jobConfig.command == "/execute/something"
     }

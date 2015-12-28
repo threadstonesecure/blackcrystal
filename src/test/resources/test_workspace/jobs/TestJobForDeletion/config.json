@@ -2,7 +2,7 @@
   "command": "/execute/something",
   "executionDirectory": "/execution/directory",
   "name": "TestJobForDeletion",
-  "sourcePath": "/source/path",
+  "resourceName": "/source/path",
   "executionTime": "0 0/1 * * * ?",
   "enabled": false
 }

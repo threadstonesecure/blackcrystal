@@ -25,7 +25,7 @@ class TestUtils {
         jobConfig.command = "/execute/something"
         jobConfig.executionDirectory = "/execution/directory"
         jobConfig.name = "TestJob1"
-        jobConfig.sourcePath = "/source/path"
+        jobConfig.resourceName = "/source/path"
         jobConfig.executionTime = "0 0/1 * * * ?"
         jobConfig.enabled = false
         jobConfig
@@ -37,7 +37,7 @@ class TestUtils {
         jobConfig.command = "/execute/something"
         jobConfig.executionDirectory = "/execution/directory"
         jobConfig.name = "TestJob2"
-        jobConfig.sourcePath = "/source/path"
+        jobConfig.resourceName = "/source/path"
         jobConfig.executionTime = "0 0/1 * * * ?"
         jobConfig.enabled = false
         jobConfig
@@ -48,7 +48,7 @@ class TestUtils {
         jobConfig.command = "/execute/something"
         jobConfig.executionDirectory = "/execution/directory"
         jobConfig.name = "TestJob3"
-        jobConfig.sourcePath = "/source/path"
+        jobConfig.resourceName = "/source/path"
         jobConfig.executionTime = "0 0/1 * * * ?"
         jobConfig.enabled = false
         jobConfig
@@ -60,7 +60,7 @@ class TestUtils {
         jobConfig.command = "/execute/something"
         jobConfig.executionDirectory = "/execution/directory"
         jobConfig.name = "TestJobForDeletion"
-        jobConfig.sourcePath = "/source/path"
+        jobConfig.resourceName = "/source/path"
         jobConfig.executionTime = "0 0/1 * * * ?"
         jobConfig.enabled = false
         jobConfig
