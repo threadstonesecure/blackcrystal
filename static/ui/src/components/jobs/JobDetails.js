@@ -3,6 +3,7 @@ import React from 'react';
 import NavMain from './../navigation/NavMain';
 import PageHeader from './../PageHeader';
 import PageFooter from './../PageFooter';
+import ResourceSelector  from './../resources/ResourceSelector';
 import { Input, Row, Col, Grid, Button } from 'react-bootstrap';
 import LinkedStateMixin from 'react-addons-linked-state-mixin';
 
@@ -13,7 +14,9 @@ const JobDetails = React.createClass({
     mixins: [LinkedStateMixin],
 
     save(event){
-        this.put(this.state);
+        var jobConfig = this.state;
+        jobConfig.resourceName = this.refs.resourceSelector.state.selected;
+        this.put(jobConfig);
     },
 
     put(data) {
@@ -77,10 +80,8 @@ const JobDetails = React.createClass({
                     </Row>
 
                     <Row>
-                        <Input type="text"
-                               valueLink={this.linkState('sourcePath')}
-                               placeholder="Resource"
-                               label="Resource"/>
+                        <ResourceSelector ref="resourceSelector" selected={this.state.resourceName}/>
+
                     </Row>
 
                     <Row>
