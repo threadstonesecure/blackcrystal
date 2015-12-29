@@ -88,7 +88,6 @@ const Resources = React.createClass({
 
                 <Grid>
                     <Row>
-
                         <Navbar inverse>
                             <Nav pullRight>
                                 <Button align="right" bsStyle="link" href="/new/resource"> <Glyphicon glyph="plus"/> Add

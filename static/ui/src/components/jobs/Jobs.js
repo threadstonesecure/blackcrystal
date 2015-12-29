@@ -3,7 +3,7 @@ import React from 'react';
 import NavMain from './../navigation/NavMain';
 import PageHeader from './../PageHeader';
 import PageFooter from './../PageFooter';
-import {Button, Glyphicon} from 'react-bootstrap';
+import {Button, Glyphicon, Grid, Row, Col, Navbar, Nav} from 'react-bootstrap';
 import $ from 'jquery';
 
 var View1Table = React.createClass({
@@ -72,10 +72,23 @@ const Jobs = React.createClass({
                     title="Jobs Page"
                     subTitle="List of jobs will be here."/>
 
-                <div className="container bs-docs-container">
-                    <View1Table data={this.state.data}/>
+                <Grid>
+                    <Row>
+                        <Navbar inverse>
+                            <Nav pullRight>
+                                <Button align="right" bsStyle="link" href="/new/job"> <Glyphicon glyph="plus"/> Add
+                                    Job </Button>
+                            </Nav>
+                        </Navbar>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <View1Table data={this.state.data}/>
+                        </Col>
+                    </Row>
 
-                </div>
+                </Grid>
+
                 <PageFooter />
             </div>
         );

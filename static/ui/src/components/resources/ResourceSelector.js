@@ -10,7 +10,7 @@ const ResourceSelector = React.createClass({
         return $.getJSON("http://localhost:8080/resources");
     },
     getInitialState() {
-        return {data: []};
+        return {data: [], selected: this.props.selected};
     },
 
     onChange(event) {
@@ -21,28 +21,27 @@ const ResourceSelector = React.createClass({
         this.loadData().success(function (data) {
             if (this.isMounted()) {
                 this.setState({data: data});
+                console.log("settgin state on resource selector")
             }
         }.bind(this))
     },
     render() {
-        var defaultState = this.props.selected;
-        console.log("defaultState:: "+defaultState)
         return (
             <div>
-                <Input type="select" label="Resource" placeholder="Resource" onChange={this.onChange}>
-                    <option value="" disabled selected hidden>Please Choose a Resource</option>
+                <Input value={this.state.selected}
+                       type="select"
+                       label="Resource" placeholder="Resource"
+                       onChange={this.onChange}>
                     {
-                        this.state.data.map(function (item) {
-                                return <option value={item.name} selected={ (defaultState != null && defaultState == item.name) ? true : false}>
-                                    {item.name}</option>
+                        this.state.data.map(function (item, i) {
+                                return <option value={item.name} key={i}>{item.name}</option>
                             }
                         )}
-
                 </Input>
+
 
             </div>
         );
     }
 });
-
 export default ResourceSelector;

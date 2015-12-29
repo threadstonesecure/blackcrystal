@@ -44,15 +44,21 @@ const JobDetails = React.createClass({
     },
 
     getInitialState() {
+        return {name: '', resourceName: '', executionTime: '0 0 0/1 1/1 * ? *', executionDirectory: '', enabled: false};
         return {data: []};
     },
 
     componentDidMount(){
-        this.loadData().success(function (data) {
-            if (this.isMounted()) {
-                this.setState(data);
-            }
-        }.bind(this))
+        //If name is not null, it is deducted that is in edit mode
+        //If is null, new job is to be added, needs better way to decide whether it is edit or add
+        if(this.props.params.name != null){
+            this.loadData().success(function (data) {
+                if (this.isMounted()) {
+                    this.setState(data);
+                    this.refs.resourceSelector.setState({selected :this.state.resourceName });
+                }
+            }.bind(this))
+        }
     },
 
     render() {
@@ -80,7 +86,7 @@ const JobDetails = React.createClass({
                     </Row>
 
                     <Row>
-                        <ResourceSelector ref="resourceSelector" selected={this.state.resourceName}/>
+                        <ResourceSelector ref="resourceSelector" selected={this.state.resourceName} />
 
                     </Row>
 

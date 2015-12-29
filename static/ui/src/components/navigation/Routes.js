@@ -16,6 +16,7 @@ export default (
     <Route path="resources" component={Resources} />
     <Route path="new/resource" component={Resource} />
     <Route path="job/:name" component={JobDetails} />
+    <Route path="new/job" component={JobDetails} />
     <Route path="*" component={NotFoundPage} />
   </Route>
 );
