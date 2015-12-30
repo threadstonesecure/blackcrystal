@@ -1,5 +1,6 @@
 package blackcrystal.utility;
 
+import blackcrystal.app.GsonConfig;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +19,14 @@ public class FileUtility {
     private static final Logger logger = LoggerFactory.getLogger(FileUtility.class);
 
     public static <T> T read(Path path, Class<T> valueType) throws IOException {
-        return new Gson().fromJson(new FileReader(path.toFile()), valueType);
+        Gson gson = GsonConfig.gsonBuilder();
+        return gson.fromJson(new FileReader(path.toFile()), valueType);
     }
 
 
     public static boolean write(Path path, Object object) {
-        String asJson = new Gson().toJson(object);
+        Gson gson = GsonConfig.gsonBuilder();
+        String asJson = gson.toJson(object);
         try {
             Files.write(path, asJson.getBytes());
             return true;

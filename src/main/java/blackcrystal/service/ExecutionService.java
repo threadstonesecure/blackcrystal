@@ -1,51 +1,36 @@
 package blackcrystal.service;
 
 import blackcrystal.model.JobConfig;
-import blackcrystal.model.JobExecutionInfo;
-import blackcrystal.model.JobExecutionResult;
+import blackcrystal.model.JobExecution;
+import blackcrystal.model.PageAssembler;
+import blackcrystal.repository.ExecutionRepository;
 import blackcrystal.utility.FileUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Optional;
 
+@Transactional
 @Component("executionService")
 public class ExecutionService {
 
     private static final Logger logger = LoggerFactory.getLogger(ExecutionService.class);
 
     @Autowired
+    private ExecutionRepository executionRepository;
+
+
+    @Autowired
     private DirectoryService directoryService;
-
-
-    public Optional<JobExecutionInfo> getExecutionInfo(String name) {
-        Path path = directoryService.executionFile(name);
-        if (Files.exists(path)) {
-            try {
-                return Optional.of(FileUtility.read(path, JobExecutionInfo.class));
-            } catch (Exception e) {
-                logger.error("could not read the execution file ", e);
-            }
-        }
-        return Optional.empty();
-    }
-
-    public Optional<JobExecutionResult> getExecutionResult(String name, Integer executionId) {
-        Path path = directoryService.executionResultFile(name, executionId.toString());
-        if (Files.exists(path)) {
-            try {
-                return Optional.of(FileUtility.read(path, JobExecutionResult.class));
-            } catch (Exception e) {
-                logger.error("could not read the execution file ", e);
-            }
-        }
-        return Optional.empty();
-    }
 
     public Optional<Path> getExecutionLogPath(String name, Integer executionId) {
         Path path = directoryService.executionLog(name, executionId.toString());
@@ -55,31 +40,34 @@ public class ExecutionService {
         return Optional.empty();
     }
 
-
     public Integer getNextExecId(JobConfig jobConfig) {
-        Path path = directoryService.executionFile(jobConfig.name);
-        JobExecutionInfo executionInfo = null;
-        if (Files.exists(path)) {
-            try {
-                executionInfo = FileUtility.read(path, JobExecutionInfo.class);
-            } catch (Exception e) {
-                logger.error("could not read the execution file ", e);
-            }
+        Integer lastExecutionId = executionRepository.findLastExecutionID(jobConfig.name);
+        return lastExecutionId + 1;
+    }
+
+    public JobExecution writeExecutionResult(JobConfig jobConfig, JobExecution jobExecution) {
+        Path path = directoryService.executionResultFile(jobConfig.name, jobExecution.getExecutionId().toString());
+        FileUtility.write(path, jobExecution);
+        return executionRepository.save(jobExecution);
+    }
+
+    public Optional<JobExecution> getExecution(String jobName, Integer executionId) {
+        JobExecution jobExecution = executionRepository.findByJob(jobName, executionId);
+        if (jobExecution != null) {
+            return Optional.of(jobExecution);
         } else {
-            executionInfo = new JobExecutionInfo(0, new ArrayList<>());
+            return Optional.empty();
+        }
+    }
+
+    public Optional<PageAssembler<?>> getExecutions(String name, int page, int size) {
+        Pageable pageable = new PageRequest(page, size, Sort.Direction.DESC, "executionId");
+        Page<JobExecution> executions = executionRepository.findByJob(name, pageable);
+        if (executions.hasContent()) {
+            return Optional.of(new PageAssembler<>(executions));
+        } else {
+            return Optional.empty();
         }
 
-        Integer executionId = executionInfo.lastExecutionId + 1;
-        executionInfo.executions.add(executionId);
-        executionInfo.lastExecutionId = executionId;
-        this.writeExecutionInfo(jobConfig, executionInfo);
-        return executionId;
     }
-
-    public boolean writeExecutionInfo(JobConfig jobConfig, JobExecutionInfo info) {
-        Path path = directoryService.executionFile(jobConfig.name);
-        return FileUtility.write(path, info);
-    }
-
-
 }

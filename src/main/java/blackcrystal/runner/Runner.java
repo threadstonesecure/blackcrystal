@@ -1,7 +1,7 @@
 package blackcrystal.runner;
 
 import blackcrystal.model.JobConfig;
-import blackcrystal.model.JobExecutionResult;
+import blackcrystal.model.JobExecution;
 import blackcrystal.service.DirectoryService;
 import blackcrystal.service.ExecutionService;
 import blackcrystal.service.JobConfigService;
@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.concurrent.Callable;
 
 
@@ -26,7 +26,6 @@ public class Runner implements Runnable, Callable {
 
     private JobConfig jobConfig;
 
-    private JobConfigService jobConfigService;
 
     private ExecutionService executionService;
 
@@ -38,9 +37,8 @@ public class Runner implements Runnable, Callable {
     }
 
     //TODO : Temporary Solution - do not pass the reference of JobConfigService here
-    public Runner(JobConfig jobConfig, JobConfigService jobConfigService, ExecutionService executionService, DirectoryService directoryService) {
+    public Runner(JobConfig jobConfig, ExecutionService executionService, DirectoryService directoryService) {
         this.jobConfig = jobConfig;
-        this.jobConfigService = jobConfigService;
         this.executionService = executionService;
         this.directoryService = directoryService;
     }
@@ -48,7 +46,7 @@ public class Runner implements Runnable, Callable {
 
     @Override
     public void run() {
-        LocalDateTime startTime = LocalDateTime.now();
+        OffsetDateTime startTime = OffsetDateTime.now();
         Process process = null;
         Integer executionId = executionService.getNextExecId(jobConfig);
         Path executionDirectory = directoryService.executionDirectory(jobConfig.name, executionId.toString());
@@ -56,6 +54,7 @@ public class Runner implements Runnable, Callable {
 
         FileUtility.createDirectory(executionDirectory);
 
+        logger.info("starting execution of "+ jobConfig.name);
         try {
             ProcessBuilder pb = new ProcessBuilder(jobConfig.command.split(" "));
             //Map<String, String> env = pb.environment();
@@ -77,16 +76,18 @@ public class Runner implements Runnable, Callable {
         }
 
 
-        LocalDateTime endTime = LocalDateTime.now();
+        OffsetDateTime endTime = OffsetDateTime.now();
         Duration duration = Duration.between(startTime, endTime);
-        duration.getSeconds();
 
-        JobExecutionResult j = new JobExecutionResult();
-        j.duration = Long.toString(duration.getSeconds());
-        j.startTime = startTime.toString();
-        j.endTime = endTime.toString();
-        j.result = Integer.toString(process.exitValue());
-        jobConfigService.writeExecutionResult(jobConfig, j, executionId.toString());
+        JobExecution jobExecution = new JobExecution();
+        jobExecution.setResult(process.exitValue());
+        jobExecution.setExecutionId(executionId);
+        jobExecution.setJobName(jobConfig.name);
+        jobExecution.setDuration(duration.getSeconds());
+        jobExecution.setStartTime(startTime);
+        jobExecution.setEndTime(endTime);
+
+        executionService.writeExecutionResult(jobConfig, jobExecution);
     }
 
     @Override

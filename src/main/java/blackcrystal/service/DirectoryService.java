@@ -76,15 +76,15 @@ public class DirectoryService {
         return jobDirectory(name).resolve("config.json");
     }
 
-    /**
-     * ./workspace/jobs/job_name/execution.json
-     *
-     * @param name
-     * @return
-     */
-    public Path executionFile(String name) {
-        return jobDirectory(name).resolve("execution.json");
-    }
+//    /**
+//     * ./workspace/jobs/job_name/execution.json
+//     *
+//     * @param name
+//     * @return
+//     */
+//    public Path executionFile(String name) {
+//        return jobDirectory(name).resolve("execution.json");
+//    }
 
     /**
      * ./workspace/jobs/job_name/execution_id

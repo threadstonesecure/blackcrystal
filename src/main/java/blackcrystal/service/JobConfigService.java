@@ -1,7 +1,6 @@
 package blackcrystal.service;
 
 import blackcrystal.model.JobConfig;
-import blackcrystal.model.JobExecutionResult;
 import blackcrystal.utility.FileUtility;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -38,12 +37,6 @@ public class JobConfigService {
         return jobs;
     }
 
-
-    //TODO - correct naming
-    public boolean writeExecutionResult(JobConfig jobConfig, JobExecutionResult result, String executionId) {
-        Path path = directoryService.executionResultFile(jobConfig.name, executionId);
-        return FileUtility.write(path, result);
-    }
 
     public boolean writeJobConfig(JobConfig jobConfig) {
         Path jobConfigFile = directoryService.configFile(jobConfig.name);

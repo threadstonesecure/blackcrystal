@@ -1,6 +1,6 @@
 package blackcrystal.controller;
 
-import blackcrystal.service.JobService;
+import blackcrystal.service.ExecutionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -25,22 +22,24 @@ public class ExecutionController {
 
 
     @Autowired
-    private JobService jobService;
+    private ExecutionService executionService;
 
 
     @ResponseBody
     @RequestMapping(value = "/job/{name}/executions", method = RequestMethod.GET)
-    public ResponseEntity<?> getAll(@PathVariable String name) {
-        return jobService.getExecutions(name)
-                .map(j -> new ResponseEntity(j, HttpStatus.OK))
+    public ResponseEntity<?> getAll(@PathVariable String name,
+                                    @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                    @RequestParam(name = "size", defaultValue = "20") Integer size) {
+        return executionService.getExecutions(name, page, size)
+                .map(e -> new ResponseEntity(e, HttpStatus.OK))
                 .orElse(new ResponseEntity(HttpStatus.NOT_FOUND));
     }
 
     @ResponseBody
     @RequestMapping(value = "/job/{name}/execution/{executionId}")
     public ResponseEntity<?> get(@PathVariable String name, @PathVariable Integer executionId) {
-        return jobService.getExecutionResult(name, executionId)
-                .map(j -> new ResponseEntity(j, HttpStatus.OK))
+        return executionService.getExecution(name, executionId)
+                .map(e -> new ResponseEntity(e, HttpStatus.OK))
                 .orElse(new ResponseEntity(HttpStatus.NOT_FOUND));
     }
 
@@ -48,7 +47,7 @@ public class ExecutionController {
     @ResponseBody
     @RequestMapping(value = "/job/{name}/execution/{executionId}/log")
     public ResponseEntity<?> getLog(@PathVariable String name, @PathVariable Integer executionId) {
-        return jobService.getExecutionLogPath(name, executionId)
+        return executionService.getExecutionLogPath(name, executionId)
                 .map(p -> {
                     Resource file = new FileSystemResource(p.toString());
 
@@ -67,7 +66,6 @@ public class ExecutionController {
 
                 })
                 .orElse(new ResponseEntity(HttpStatus.NOT_FOUND));
-
 
     }
 

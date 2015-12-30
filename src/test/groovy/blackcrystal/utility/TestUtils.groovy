@@ -1,13 +1,13 @@
 package blackcrystal.utility
 
 import blackcrystal.model.JobConfig
-import blackcrystal.model.JobExecutionInfo
-import blackcrystal.model.JobExecutionResult
+import blackcrystal.model.JobExecution
 import blackcrystal.model.Resource
 import blackcrystal.model.ResourceType
 
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.time.OffsetDateTime
 
 class TestUtils {
 
@@ -66,16 +66,16 @@ class TestUtils {
         jobConfig
     }
 
-    def  getExecutions(){
-        new JobExecutionInfo(30, [26,27,28,29,30])
-    }
-
-
     def  getExecutionResult(){
-        new JobExecutionResult("2015-12-21T21:09:00.010","2015-12-21T21:09:10.544","10","3")
+        JobExecution jobExecution = new JobExecution()
+        jobExecution.setJobName("TestJob1")
+        jobExecution.setExecutionId(1)
+        jobExecution.setStartTime(OffsetDateTime.parse("2015-12-29T22:59:00.020+01:00"))
+        jobExecution.setEndTime(OffsetDateTime.parse("2015-12-29T22:59:11.328+01:00"))
+        jobExecution.setDuration(10)
+        jobExecution.setResult(3)
+        jobExecution
     }
-
-
     def getResourceConfig(){
         Resource resource = new Resource()
         resource.repository = "http://"

@@ -1,5 +1,8 @@
 package blackcrystal.model;
 
+import blackcrystal.utility.OffsetDateTimeTypeConverter;
+import com.google.gson.annotations.JsonAdapter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

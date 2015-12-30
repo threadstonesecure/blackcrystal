@@ -68,7 +68,7 @@ public class JobScheduler {
      */
     public boolean addJob(JobConfig jobConfig) {
         if(jobConfig.enabled){
-            Runner runner = new Runner(jobConfig, jobConfigService, executionService, directoryService);
+            Runner runner = new Runner(jobConfig, executionService, directoryService);
             ScheduledFuture scheduledFuture =
                     scheduler.schedule(runner, new CronTrigger(jobConfig.executionTime));
             threads.put(jobConfig.name, new JobThreadReference(runner, scheduledFuture));
