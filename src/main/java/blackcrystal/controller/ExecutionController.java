@@ -45,15 +45,15 @@ public class ExecutionController {
 
 
     @ResponseBody
-    @RequestMapping(value = "/job/{name}/execution/{executionId}/log")
+    @RequestMapping(value = "/job/{name}/execution/{executionId}/log", produces = "text/plain")
     public ResponseEntity<?> getLog(@PathVariable String name, @PathVariable Integer executionId) {
         return executionService.getExecutionLogPath(name, executionId)
                 .map(p -> {
                     Resource file = new FileSystemResource(p.toString());
 
                     HttpHeaders headers = new HttpHeaders();
-                    headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-                    headers.setContentDispositionFormData("inline", name + "-" + executionId + ".log");
+                    headers.setContentType(MediaType.TEXT_PLAIN);
+                    //headers.setContentDispositionFormData("inline", name + "-" + executionId + ".log");
 
                     try {
                         InputStreamResource inputStreamResource = new InputStreamResource(file.getInputStream());

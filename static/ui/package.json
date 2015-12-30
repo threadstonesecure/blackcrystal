@@ -63,6 +63,7 @@
     "lodash-compat": "^3.10.1",
     "jquery" :"2.1.4",
     "react-bootstrap": "^0.28.1",
-    "react-addons-linked-state-mixin": "0.14.3"
+    "react-addons-linked-state-mixin": "0.14.3",
+    "juration" : "0.0.1"
   }
 }

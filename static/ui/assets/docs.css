@@ -1509,3 +1509,13 @@ h1[id] {
     display: block;
   }
 }
+
+
+
+.console-output {
+  padding: 20px;
+  background-color: #000000;
+  color: #eeeeee; 
+  overflow: auto;
+  font-size: 14px; 
+}

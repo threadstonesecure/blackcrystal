@@ -14,6 +14,7 @@ var View1Table = React.createClass({
                 <tr>
                     <th>Name</th>
                     <th></th>
+
                 </tr>
                 </thead>
                 <tbody>
@@ -36,6 +37,11 @@ var View1Row = React.createClass({
                     <Button bsStyle="link" href={"/job/" + this.props.data.name}>
                         <Glyphicon glyph="edit"/>
                         Edit
+                    </Button>
+
+                    <Button bsStyle="link" href={"/job/" + this.props.data.name+"/executions"}>
+                        <Glyphicon glyph="tasks"/>
+                        Executions
                     </Button>
                 </td>
             </tr>

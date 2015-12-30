@@ -45,7 +45,6 @@ const JobDetails = React.createClass({
 
     getInitialState() {
         return {name: '', resourceName: '', executionTime: '0 0 0/1 1/1 * ? *', executionDirectory: '', enabled: false};
-        return {data: []};
     },
 
     componentDidMount(){
