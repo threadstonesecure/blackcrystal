@@ -5,7 +5,7 @@ import { Nav } from 'react-bootstrap';
 
 const NAV_LINKS = {
   'overview': {
-    link: '/overview.html',
+    link: '/overview',
     title: 'Overview'
   },
   'jobs': {
