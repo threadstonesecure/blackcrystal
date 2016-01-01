@@ -7,6 +7,7 @@ import ResourceSelector  from './../resources/ResourceSelector';
 import { Input, Row, Col, Grid, Table, Button } from 'react-bootstrap';
 import $ from 'jquery';
 import elasticsearch from 'elasticsearch';
+import Status from './Status';
 
 
 const Overview = React.createClass({
@@ -67,6 +68,10 @@ const Overview = React.createClass({
                             </tbody>
                         </Table>
                     </Row>
+
+                    <Row>
+                        <Status />
+                        </Row>
                 </Grid>
                 <PageFooter />
             </div>
