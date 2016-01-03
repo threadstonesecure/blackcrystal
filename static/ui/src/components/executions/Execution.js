@@ -9,6 +9,9 @@ import LinkedStateMixin from 'react-addons-linked-state-mixin';
 import ConsoleOutput from './ConsoleOutput';
 import ExitCode from './ExitCode';
 import juration from 'juration';
+import Status from './Status';
+import Hosts from './Hosts';
+import Plays from './Plays';
 
 import $ from 'jquery';
 
@@ -57,6 +60,18 @@ const Execution = React.createClass({
 
                     <Row>
                         <ExitCode result={this.state.result}/>
+                    </Row>
+
+                    <Row>
+                        <Col  xs={6}> <Status jobName={this.props.params.name} executionId={this.props.params.id}/></Col>
+                        <Col  xs={6} > <Hosts jobName={this.props.params.name} executionId={this.props.params.id}/></Col>
+
+                    </Row>
+
+                    <Row>
+                        <Col  xs={6}> <Plays jobName={this.props.params.name} executionId={this.props.params.id}/></Col>
+                        <Col  xs={6} > </Col>
+
                     </Row>
 
                     <Row>
