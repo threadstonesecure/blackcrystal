@@ -6,7 +6,7 @@ import elasticsearch from 'elasticsearch';
 
 const Plays = React.createClass({
     getClient(){
-        return new elasticsearch.Client({host: 'localhost:9200', log: 'trace'});
+        return new elasticsearch.Client({host: 'localhost:9200', log: 'error'});
     },
 
     getData(){
@@ -32,12 +32,7 @@ const Plays = React.createClass({
                 }
             }
         }).then(function (resp) {
-            console.log("------------");
-            console.log(resp);
-            console.log(resp.aggregations.plays);
-
-
-            this.setState({plays: resp.aggregations.plays.buckets});
+           this.setState({plays: resp.aggregations.plays.buckets});
         }.bind(this), function (err) {
             console.trace(err.message);
         });

@@ -1,11 +1,6 @@
 import React from 'react';
-import packageJSON from '../../package.json';
 
-let version = packageJSON.version;
-
-if (/docs/.test(version)) {
-  version = version.split('-')[0];
-}
+let version = "1.1"
 
 const PageFooter = React.createClass({
   render() {

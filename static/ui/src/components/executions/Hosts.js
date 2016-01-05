@@ -6,7 +6,7 @@ import elasticsearch from 'elasticsearch';
 
 const Hosts = React.createClass({
     getClient(){
-        return new elasticsearch.Client({host: 'localhost:9200', log: 'error'});
+        return new elasticsearch.Client({host: 'localhost:9200', log: 'trace'});
     },
 
     getData(){

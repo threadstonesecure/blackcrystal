@@ -1,80 +1,39 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
+import { Router, Route } from 'react-router';
 
-const Root = React.createClass({
-  statics: {
-    /**
-     * Get the list of pages that are renderable
-     *
-     * @returns {Array}
-     */
-    getPages() {
-      return [
-        'index.html',
-        'overview.html',
-        'jobs.html',
-        'resources.html',
-        'diagnostic.html'
-      ];
-    }
-  },
+import App from './App';
+import Jobs from './pages/Jobs';
+import Overview from './pages/Overview';
+import Resources from './pages/Resources';
+import JobDetails from './pages/JobDetails';
+import HomePage from './pages/HomePage';
+import Resource from './pages/Resource';
+import Execution from './pages/Execution';
+import Executions from './pages/Executions';
+import NotFoundPage from './pages/NotFoundPage';
 
-  childContextTypes: {
-    metadata: React.PropTypes.object
-  },
 
-  getChildContext() {
-    return {metadata: Root.propData};
-  },
+export default class Root extends Component {
+  static propTypes = {
+    history: PropTypes.object.isRequired
+  }
 
   render() {
-    // Dump out our current props to a global object via a script tag so
-    // when initialising the browser environment we can bootstrap from the
-    // same props as what each page was rendered with.
-    let browserInitScriptObj = {
-      __html:
-        `window.ASSET_BASE_URL = ${JSON.stringify(Root.assetBaseUrl)};
-        window.PROP_DATA = ${JSON.stringify(Root.propData)};
-        // console noop shim for IE8/9
-        (function (w) {
-          var noop = function () {};
-          if (!w.console) {
-            w.console = {};
-            ['log', 'info', 'warn', 'error'].forEach(function (method) {
-              w.console[method] = noop;
-            });
-         }
-        }(window));`
-    };
-
-    let head = {
-      __html: `<title>Black Crystal</title>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="${Root.assetBaseUrl}/assets/bundle.css" rel="stylesheet">
-        <link href="${Root.assetBaseUrl}/assets/favicon.ico?v=2" type="image/x-icon" rel="shortcut icon">
-        <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.js"></script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-sham.js"></script>
-        <![endif]-->`
-    };
-
+    const { history } = this.props;
     return (
-      <html>
-        <head dangerouslySetInnerHTML={head} />
-
-        <body>
-          {this.props.children}
-
-          <script dangerouslySetInnerHTML={browserInitScriptObj} />
-          <script src={`${Root.assetBaseUrl}/assets/bundle.js`} />
-        </body>
-      </html>
+      <Router history={history}>
+        <Route  path="/" component={App}>
+            <Route path="jobs" component={Jobs} />
+            <Route path="resources" component={Resources} />
+            <Route path="new/resource" component={Resource} />
+            <Route path="job/:name" component={JobDetails} />
+            <Route path="job/:name/executions" component={Executions} />
+            <Route path="job/:name/execution/:id" component={Execution} />
+            <Route path="new/job" component={JobDetails} />
+            <Route path="overview" component={Overview} />
+            <Route path="*" component={NotFoundPage} />
+          </Route>
+      </Router>
     );
   }
-});
-
-
-export default Root;
+}

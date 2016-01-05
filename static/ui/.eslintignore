@@ -2,3 +2,4 @@ dist/**
 built/**
 lib/**
 node_modules/**
+server.js
