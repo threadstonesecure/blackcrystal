@@ -1,10 +1,22 @@
 import React from 'react';
 
-import NavMain from './../navigation/NavMain';
-import PageHeader from './../PageHeader';
-import PageFooter from './../PageFooter';
-import {Button, Glyphicon, Grid, Row, Col, Navbar, Nav} from 'react-bootstrap';
+import NavMain from '../components/navigation/NavMain';
+import PageFooter from '../components/PageFooter';
+import PageHeader from '../components/PageHeader';
+import {Button, Alert,Grid,Row,Col,Navbar,Nav,NavDropdown,MenuItem,NavItem, Glyphicon} from 'react-bootstrap';
 import $ from 'jquery';
+
+
+const NoResourceAlert = React.createClass({
+    render: function () {
+        return (
+            <Alert bsStyle="warning">
+                <strong>There are no resources! </strong> You need to add a resource to start working, with jobs!
+            </Alert>
+        );
+    }
+});
+
 
 var View1Table = React.createClass({
     render: function () {
@@ -14,7 +26,7 @@ var View1Table = React.createClass({
                 <tr>
                     <th>Name</th>
                     <th></th>
-
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -34,14 +46,15 @@ var View1Row = React.createClass({
             <tr>
                 <td>{this.props.data.name}</td>
                 <td>
-                    <Button bsStyle="link" href={"/job/" + this.props.data.name}>
+                    <Button bsStyle="link" href="#">
                         <Glyphicon glyph="edit"/>
                         Edit
                     </Button>
-
-                    <Button bsStyle="link" href={"/job/" + this.props.data.name+"/executions"}>
-                        <Glyphicon glyph="tasks"/>
-                        Executions
+                </td>
+                <td>
+                    <Button bsStyle="link" href="#">
+                        <Glyphicon glyph="remove"/>
+                        Delete
                     </Button>
                 </td>
             </tr>
@@ -50,12 +63,11 @@ var View1Row = React.createClass({
 });
 
 
-const Jobs = React.createClass({
+const Resources = React.createClass({
 
     loadData() {
-        return $.getJSON("http://localhost:8080/jobs");
+        return $.getJSON("http://localhost:8080/resources");
     },
-
     getInitialState() {
         return {data: []};
     },
@@ -68,28 +80,27 @@ const Jobs = React.createClass({
             }
         }.bind(this))
     },
-
     render() {
         return (
             <div>
-                <NavMain activePage="jobs"/>
-
-                <PageHeader
-                    title="Jobs Page"
-                    subTitle="List of jobs will be here."/>
+                <NavMain activePage="resources"/>
+                <PageHeader title="Resources" subTitle=""/>
 
                 <Grid>
                     <Row>
                         <Navbar inverse>
                             <Nav pullRight>
-                                <Button align="right" bsStyle="link" href="/new/job"> <Glyphicon glyph="plus"/> Add
-                                    Job </Button>
+                                <Button align="right" bsStyle="link" href="/new/resource"> <Glyphicon glyph="plus"/> Add
+                                    Resource </Button>
                             </Nav>
                         </Navbar>
                     </Row>
                     <Row>
                         <Col>
-                            <View1Table data={this.state.data}/>
+                            {
+                                (this.state.data == null || this.state.data.length == 0 )
+                                    ? <NoResourceAlert/> : <View1Table data={this.state.data}/>
+                            }
                         </Col>
                     </Row>
 
@@ -101,4 +112,4 @@ const Jobs = React.createClass({
     }
 });
 
-export default Jobs;
+export default Resources;

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import NavMain from '../navigation/NavMain';
-import PageHeader from '../PageHeader';
-import PageFooter from '../PageFooter';
-import ResourceType from './ResourceType';
+import NavMain from '../components/navigation/NavMain';
+import PageFooter from '../components/PageFooter';
+import PageHeader from '../components/PageHeader';
+import ResourceType from '../components/resources/ResourceType';
 import LinkedStateMixin from 'react-addons-linked-state-mixin';
 import {Button, Alert,Grid,Row,Col,Navbar,Nav,NavDropdown,MenuItem,NavItem, Glyphicon,Input} from 'react-bootstrap';
 import $ from 'jquery';

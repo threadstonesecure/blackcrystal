@@ -1,13 +1,14 @@
 import React from 'react';
 
-import NavMain from './../navigation/NavMain';
-import PageHeader from './../PageHeader';
-import PageFooter from './../PageFooter';
-import ResourceSelector  from './../resources/ResourceSelector';
+import NavMain from '../components/navigation/NavMain';
+import PageFooter from '../components/PageFooter';
+import PageHeader from '../components/PageHeader';
+import ResourceSelector  from '../components/resources/ResourceSelector';
+import Status from '../components/overview/Status';
+
 import { Input, Row, Col, Grid, Table, Button } from 'react-bootstrap';
 import $ from 'jquery';
 import elasticsearch from 'elasticsearch';
-import Status from './Status';
 
 
 const Overview = React.createClass({

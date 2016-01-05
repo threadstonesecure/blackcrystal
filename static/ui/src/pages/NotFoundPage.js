@@ -1,8 +1,8 @@
 import React from 'react';
 
-import NavMain from './navigation/NavMain';
-import PageHeader from './PageHeader';
-import PageFooter from './PageFooter';
+import NavMain from '../components/navigation/NavMain';
+import PageFooter from '../components/PageFooter';
+import PageHeader from '../components/PageHeader';
 
 const NotFoundPage = React.createClass({
   render() {

@@ -1,22 +1,10 @@
 import React from 'react';
 
-import NavMain from '../navigation/NavMain';
-import PageHeader from '../PageHeader';
-import PageFooter from '../PageFooter';
-import {Button, Alert,Grid,Row,Col,Navbar,Nav,NavDropdown,MenuItem,NavItem, Glyphicon} from 'react-bootstrap';
+import NavMain from '../components/navigation/NavMain';
+import PageFooter from '../components/PageFooter';
+import PageHeader from '../components/PageHeader';
+import {Button, Glyphicon, Grid, Row, Col, Navbar, Nav, Modal} from 'react-bootstrap';
 import $ from 'jquery';
-
-
-const NoResourceAlert = React.createClass({
-    render: function () {
-        return (
-            <Alert bsStyle="warning">
-                <strong>There are no resources! </strong> You need to add a resource to start working, with jobs!
-            </Alert>
-        );
-    }
-});
-
 
 var View1Table = React.createClass({
     render: function () {
@@ -26,7 +14,7 @@ var View1Table = React.createClass({
                 <tr>
                     <th>Name</th>
                     <th></th>
-                    <th></th>
+
                 </tr>
                 </thead>
                 <tbody>
@@ -41,21 +29,32 @@ var View1Table = React.createClass({
 });
 
 var View1Row = React.createClass({
+    open() {
+        if (window.confirm("Are you sure you want to delete this job?")) {
+            console.log("ok");
+        }
+    },
     render: function () {
         return (
             <tr>
                 <td>{this.props.data.name}</td>
                 <td>
-                    <Button bsStyle="link" href="#">
-                        <Glyphicon glyph="edit"/>
-                        Edit
-                    </Button>
-                </td>
-                <td>
-                    <Button bsStyle="link" href="#">
+                    <Button bsStyle="link" onClick={this.open}>
                         <Glyphicon glyph="remove"/>
                         Delete
                     </Button>
+
+                    <Button bsStyle="link" href={"/job/" + this.props.data.name}>
+                        <Glyphicon glyph="edit"/>
+                        Edit
+                    </Button>
+
+                    <Button bsStyle="link" href={"/job/" + this.props.data.name+"/executions"}  >
+                        <Glyphicon glyph="tasks"/>
+                        Executions
+                    </Button>
+
+
                 </td>
             </tr>
         );
@@ -63,11 +62,12 @@ var View1Row = React.createClass({
 });
 
 
-const Resources = React.createClass({
+const Jobs = React.createClass({
 
     loadData() {
-        return $.getJSON("http://localhost:8080/resources");
+        return $.getJSON("http://localhost:8080/jobs");
     },
+
     getInitialState() {
         return {data: []};
     },
@@ -80,36 +80,37 @@ const Resources = React.createClass({
             }
         }.bind(this))
     },
+
     render() {
         return (
             <div>
-                <NavMain activePage="resources"/>
-                <PageHeader title="Resources" subTitle=""/>
+                <NavMain activePage="jobs"/>
+
+                <PageHeader
+                    title="Jobs Page"
+                    subTitle="List of jobs will be here."/>
 
                 <Grid>
                     <Row>
                         <Navbar inverse>
                             <Nav pullRight>
-                                <Button align="right" bsStyle="link" href="/new/resource"> <Glyphicon glyph="plus"/> Add
-                                    Resource </Button>
+                                <Button align="right" bsStyle="link" href="/new/job"> <Glyphicon glyph="plus"/> Add
+                                    Job </Button>
                             </Nav>
                         </Navbar>
                     </Row>
                     <Row>
                         <Col>
-                            {
-                                (this.state.data == null || this.state.data.length == 0 )
-                                    ? <NoResourceAlert/> : <View1Table data={this.state.data}/>
-                            }
+                            <View1Table data={this.state.data}/>
                         </Col>
                     </Row>
 
                 </Grid>
 
                 <PageFooter />
-            </div>
+            </div> 
         );
     }
 });
 
-export default Resources;
+export default Jobs;

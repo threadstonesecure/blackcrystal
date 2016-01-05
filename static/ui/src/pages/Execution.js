@@ -1,17 +1,17 @@
 import React from 'react';
 
-import NavMain from './../navigation/NavMain';
-import PageHeader from './../PageHeader';
-import PageFooter from './../PageFooter';
-import ResourceSelector  from './../resources/ResourceSelector';
+import NavMain from '../components/navigation/NavMain';
+import PageFooter from '../components/PageFooter';
+import PageHeader from '../components/PageHeader';
+import ResourceSelector  from './../components/resources/ResourceSelector';
 import { Input, Row, Col, Grid, Label,Glyphicon,ProgressBar,  Button } from 'react-bootstrap';
 import LinkedStateMixin from 'react-addons-linked-state-mixin';
-import ConsoleOutput from './ConsoleOutput';
-import ExitCode from './ExitCode';
+import ConsoleOutput from '../components/executions/ConsoleOutput';
+import ExitCode from '../components/executions/ExitCode';
 import juration from 'juration';
-import Status from './Status';
-import Hosts from './Hosts';
-import Plays from './Plays';
+import Status from '../components/executions/Status';
+import Hosts from '../components/executions/Hosts';
+import Plays from '../components/executions/Plays';
 
 import $ from 'jquery';
 

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import NavMain from './../navigation/NavMain';
-import PageHeader from './../PageHeader';
-import PageFooter from './../PageFooter';
-import ResourceSelector  from './../resources/ResourceSelector';
+import NavMain from '../components/navigation/NavMain';
+import PageFooter from '../components/PageFooter';
+import PageHeader from '../components/PageHeader';
+import ResourceSelector  from '../components/resources/ResourceSelector';
 import { Input, Row, Col, Grid, Button } from 'react-bootstrap';
 import LinkedStateMixin from 'react-addons-linked-state-mixin';
 
