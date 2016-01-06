@@ -4,6 +4,8 @@ import Root from './Root';
 import jQuery from 'jquery';
 import bootstrap from 'bootstrap';
 import ReactDOM from 'react-dom';
+import '../css/style.css';
+
 
 const rootEl = document.getElementById('root');
 // Use hash location for Github Pages

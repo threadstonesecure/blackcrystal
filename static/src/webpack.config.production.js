@@ -1,6 +1,8 @@
 /* eslint-disable no-var */
 var path = require('path');
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   devtool: 'source-map',
@@ -12,6 +14,12 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
+    new ExtractTextPlugin("style.css"),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'index.html'
+     // inject: 'true'
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
@@ -28,6 +36,12 @@ module.exports = {
       test: /\.jsx?$/,
       loaders: ['babel'],
       include: path.join(__dirname, 'js')
+    },
+    {
+      test: /\.css$/,
+      loader: ExtractTextPlugin.extract("style-loader", "css-loader"),
+      include: path.join(__dirname, 'css')
     }]
   }
 };
+
