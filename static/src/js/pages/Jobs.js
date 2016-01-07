@@ -3,6 +3,7 @@ import React from 'react';
 import NavMain from '../components/navigation/NavMain';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
+import { Link } from 'react-router';
 import {Button, Glyphicon, Grid, Row, Col, Navbar, Nav, Modal} from 'react-bootstrap';
 import $ from 'jquery';
 
@@ -43,18 +44,14 @@ var View1Row = React.createClass({
                         <Glyphicon glyph="remove"/>
                         Delete
                     </Button>
-
-                    <Button bsStyle="link" href={"/job/" + this.props.data.name}>
+                   <Link to={"/job/" + this.props.data.name}>
                         <Glyphicon glyph="edit"/>
                         Edit
-                    </Button>
-
-                    <Button bsStyle="link" href={"/job/" + this.props.data.name+"/executions"}  >
-                        <Glyphicon glyph="tasks"/>
+                    </Link>
+                    <Link to={"/job/" + this.props.data.name+"/executions"}>
+                      <Glyphicon glyph="tasks"/>
                         Executions
-                    </Button>
-
-
+                    </Link>
                 </td>
             </tr>
         );
@@ -94,8 +91,8 @@ const Jobs = React.createClass({
                     <Row>
                         <Navbar inverse>
                             <Nav pullRight>
-                                <Button align="right" bsStyle="link" href="/new/job"> <Glyphicon glyph="plus"/> Add
-                                    Job </Button>
+                                <Link to="/new/job"> <Glyphicon glyph="plus"/> Add
+                                    Job </Link>
                             </Nav>
                         </Navbar>
                     </Row>

@@ -4,7 +4,7 @@ import NavMain from '../components/navigation/NavMain';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
 import ResourceSelector  from './../components/resources/ResourceSelector';
-import { Input, Row, Col, Grid, Label,Glyphicon,ProgressBar,  Button } from 'react-bootstrap';
+import { Input, Row, Col, Grid, Label,Glyphicon,ProgressBar } from 'react-bootstrap';
 import LinkedStateMixin from 'react-addons-linked-state-mixin';
 import ConsoleOutput from '../components/executions/ConsoleOutput';
 import ExitCode from '../components/executions/ExitCode';

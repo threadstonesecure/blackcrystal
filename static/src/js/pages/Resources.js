@@ -3,6 +3,7 @@ import React from 'react';
 import NavMain from '../components/navigation/NavMain';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
+import { Link } from 'react-router';
 import {Button, Alert,Grid,Row,Col,Navbar,Nav,NavDropdown,MenuItem,NavItem, Glyphicon} from 'react-bootstrap';
 import $ from 'jquery';
 
@@ -90,8 +91,8 @@ const Resources = React.createClass({
                     <Row>
                         <Navbar inverse>
                             <Nav pullRight>
-                                <Button align="right" bsStyle="link" href="/new/resource"> <Glyphicon glyph="plus"/> Add
-                                    Resource </Button>
+                                <Link to="/new/resource"> <Glyphicon glyph="plus"/> Add
+                                    Resource </Link>
                             </Nav>
                         </Navbar>
                     </Row>

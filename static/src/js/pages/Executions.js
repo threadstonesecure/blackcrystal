@@ -3,7 +3,8 @@ import React from 'react';
 import NavMain from '../components/navigation/NavMain';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
-import { Row, Col, Grid, Glyphicon, Pagination, Button } from 'react-bootstrap';
+import { Link } from 'react-router';
+import { Row, Col, Grid, Glyphicon, Pagination } from 'react-bootstrap';
 import $ from 'jquery';
 
 var View1Table = React.createClass({
@@ -41,11 +42,10 @@ var View1Row = React.createClass({
                 <td>{this.props.data.result}</td>
                 <td>{this.props.data.duration}</td>
                 <td>
-                    <Button bsStyle="link"
-                            href={"/job/" + this.props.data.jobName+"/execution/"+this.props.data.executionId}>
+                    <Link to={"/job/" + this.props.data.jobName+"/execution/"+this.props.data.executionId}>
                         <Glyphicon glyph="tasks"/>
                         Details
-                    </Button>
+                    </Link>
                 </td>
             </tr>
         );

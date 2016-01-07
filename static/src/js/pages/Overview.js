@@ -6,7 +6,7 @@ import PageHeader from '../components/PageHeader';
 import ResourceSelector  from '../components/resources/ResourceSelector';
 import Status from '../components/overview/Status';
 
-import { Input, Row, Col, Grid, Table, Button } from 'react-bootstrap';
+import { Input, Row, Col, Grid, Table } from 'react-bootstrap';
 import $ from 'jquery';
 import elasticsearch from 'elasticsearch';
 
