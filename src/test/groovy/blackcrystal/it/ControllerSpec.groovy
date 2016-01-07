@@ -21,16 +21,15 @@ class ControllerSpec extends Specification {
     @Value('${local.server.port}')
     int port;
 
-    void "redirection should respond 404 as front-end is not available"() {
+    void "redirection should respond with user interface"() {
         when:
         ResponseEntity entity = new RestTemplate().getForEntity("http://localhost:$port", String.class)
         ResponseEntity entityUi = new RestTemplate().getForEntity("http://localhost:$port/ui", String.class)
         then:
-        thrown HttpClientErrorException
-       // entity.statusCode == HttpStatus.NOT_FOUND
-        //entityUi.statusCode == HttpStatus.NOT_FOUND
-        //entity.body.contains("<!DOCTYPE html>") == true
-        //entityUi.body.contains("<!DOCTYPE html>") == true
+        entity.statusCode == HttpStatus.OK
+        entityUi.statusCode == HttpStatus.OK
+        entity.body.contains("<!DOCTYPE html>") == true
+        entityUi.body.contains("<!DOCTYPE html>") == true
     }
 
 

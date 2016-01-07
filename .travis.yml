@@ -4,6 +4,9 @@ language: java
 jdk:
 - oraclejdk8
 
+node_js:
+  - "4.1"
+
 before_script:
 - cd static/src && npm install && npm run build
 

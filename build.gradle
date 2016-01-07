@@ -61,6 +61,16 @@ eclipse {
     }
 }
 
+task copyUiDist {
+    copy {
+        from 'static/src/dist'
+        into "static/ui"
+    }
+}
+jar.into('static/ui') {
+    from('static/ui')
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.9'
 }
