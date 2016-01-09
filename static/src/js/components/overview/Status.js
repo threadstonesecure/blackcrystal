@@ -3,7 +3,7 @@ import React from 'react';
 import {PieChart} from 'react-d3-components';
 import d3 from 'd3';
 import elasticsearch from 'elasticsearch';
-import { elasticSearchHost } from '../../utils/Config';
+import { elasticSearchHost, elasticSearchIndex } from '../../utils/Config';
 
 var sort = null;
 
@@ -16,7 +16,7 @@ const Status = React.createClass({
     getData(){
         var client = this.getClient();
         client.search({
-            index: 'ansible_logs-*',
+            index: elasticSearchIndex(),
             type: 'ansible-runs',
             body: {
                 "size": 0,

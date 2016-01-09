@@ -24,6 +24,10 @@ public class ApplicationProperties {
     @Value("${blackcrystal.elasticsearch.host}")
     private String elasticSearchHost;
 
+    @Value("${blackcrystal.elasticsearch.index}")
+    private String elasticSearchIndex;
+
+
     public String getWorkspace() {
         return workspace;
     }
@@ -49,6 +53,9 @@ public class ApplicationProperties {
         return elasticSearchPort;
     }
 
+    public String getElasticSearchIndex() {
+        return elasticSearchIndex;
+    }
 }
 
 

@@ -31,6 +31,7 @@ class ConfigControllerSpec extends Specification {
         entity.statusCode == HttpStatus.OK
         entity.body.elasticSearchHost == properties.elasticSearchHost
         entity.body.elasticSearchPort == properties.elasticSearchPort
+        entity.body.elasticSearchIndex == properties.elasticSearchIndex
         entity.body.workspace == properties.workspace
     }
 

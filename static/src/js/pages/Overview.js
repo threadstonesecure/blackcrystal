@@ -9,7 +9,7 @@ import Status from '../components/overview/Status';
 import { Input, Row, Col, Grid, Table } from 'react-bootstrap';
 import $ from 'jquery';
 import elasticsearch from 'elasticsearch';
-import { elasticSearchHost } from '../utils/Config';
+import { elasticSearchHost, elasticSearchIndex } from '../utils/Config';
 
 const Overview = React.createClass({
     getClient(){
@@ -19,7 +19,7 @@ const Overview = React.createClass({
     getData(){
         var client = this.getClient();
         client.search({
-            index: 'ansible_logs-*',
+            index: elasticSearchIndex(),
             type: 'ansible-runs',
             body: {
                 "size": 0,

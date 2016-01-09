@@ -2,7 +2,7 @@ import React from 'react';
 import { Input, Row, Col, Grid, Table } from 'react-bootstrap';
 import $ from 'jquery';
 import elasticsearch from 'elasticsearch';
-import { elasticSearchHost } from '../../utils/Config';
+import { elasticSearchHost, elasticSearchIndex } from '../../utils/Config';
 
 
 
@@ -14,7 +14,7 @@ const Hosts = React.createClass({
     getData(){
         var client = this.getClient();
         client.search({
-            index: 'ansible_logs-*',
+            index: elasticSearchIndex(),
             type: 'ansible-stats',
             body: {
                 "query": {
