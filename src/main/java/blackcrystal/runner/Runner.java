@@ -72,7 +72,7 @@ public class Runner implements Runnable {
 
         while (process.isAlive()) {
             if (running == false) {
-                logger.info("Attempting to destroy the process for the job : " + jobConfig.name, e);
+                logger.info("Attempting to destroy the process for the job : " + jobConfig.name);
                 process.destroy();
             }
         }
