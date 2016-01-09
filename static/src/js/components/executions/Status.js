@@ -68,6 +68,10 @@ const Status = React.createClass({
         var colorScale = d3.scale.ordinal().domain(["ok", "failed", "changed", "skipped", "unreachable"])
             .range(["#31a354", "#e6550d", "#e7ba52", "#9ecae1", "#fd8d3c"]);
 
+        var tooltipScatter = function(x, y) {
+            return "x: " + x + " y: " + y;
+        };
+
         var sort = null;
         return (
             <div>
@@ -75,8 +79,8 @@ const Status = React.createClass({
                     data={this.state.data}
                     width={600}
                     height={400}
-                    margin={{top: 10, bottom: 10, left: 100, right: 100}}
-                    sort={sort}
+                    tooltipHtml={tooltipScatter}
+                    tooltipOffset={top: 10, left: 10}
                     colorScale={colorScale}
                     />
 

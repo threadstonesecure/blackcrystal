@@ -5,7 +5,7 @@ import elasticsearch from 'elasticsearch';
 import { elasticSearchHost, elasticSearchIndex } from '../../utils/Config'
 
 
-const Plays = React.createClass({
+const Tasks = React.createClass({
     getClient(){
         return new elasticsearch.Client(elasticSearchHost());
     },
@@ -27,13 +27,13 @@ const Plays = React.createClass({
                 },
                 "size":0,
                 "aggs": {
-                    "plays": {
-                        "terms": {"field": "play"}
+                    "tasks": {
+                        "terms": {"field": "task"}
                     }
                 }
             }
         }).then(function (resp) {
-           this.setState({plays: resp.aggregations.plays.buckets});
+           this.setState({tasks: resp.aggregations.tasks.buckets});
         }.bind(this), function (err) {
             console.trace(err.message);
         });
@@ -41,7 +41,7 @@ const Plays = React.createClass({
     },
 
     getInitialState() {
-        return { plays: []};
+        return { tasks: []};
     },
 
     componentDidMount(){
@@ -54,13 +54,13 @@ const Plays = React.createClass({
                 <Table striped bordered condensed hover>
                     <thead>
                     <tr>
-                        <th>Plays</th>
+                        <th>Tasks</th>
 
                     </tr>
                     </thead>
                     <tbody>
                     {
-                        this.state.plays.map(function (row) {
+                        this.state.tasks.map(function (row) {
                             return <tr>
                                 <td>{row.key}</td>
 
@@ -74,4 +74,4 @@ const Plays = React.createClass({
     }
 });
 
-export default Plays;
+export default Tasks;

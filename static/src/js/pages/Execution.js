@@ -12,6 +12,8 @@ import juration from 'juration';
 import Status from '../components/executions/Status';
 import Hosts from '../components/executions/Hosts';
 import Plays from '../components/executions/Plays';
+import Tasks from '../components/executions/Tasks';
+
 import { jobExecutionURI } from '../utils/Config';
 
 import $ from 'jquery';
@@ -71,7 +73,7 @@ const Execution = React.createClass({
 
                     <Row>
                         <Col  xs={6}> <Plays jobName={this.props.params.name} executionId={this.props.params.id}/></Col>
-                        <Col  xs={6} > </Col>
+                        <Col  xs={6} >  <Tasks jobName={this.props.params.name} executionId={this.props.params.id}/> </Col>
 
                     </Row>
 
