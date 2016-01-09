@@ -1,5 +1,6 @@
 package blackcrystal.runner;
 
+import blackcrystal.app.ApplicationProperties;
 import blackcrystal.model.JobConfig;
 import blackcrystal.model.JobExecution;
 import blackcrystal.service.DirectoryService;
@@ -28,6 +29,9 @@ public class Runner implements Runnable {
     @Autowired
     private DirectoryService directoryService;
 
+    @Autowired
+    private ApplicationProperties properties;
+
     public boolean running = true;
 
     public Runner() {
@@ -52,8 +56,10 @@ public class Runner implements Runnable {
         logger.debug("starting execution of : " + jobConfig.name);
         try {
             ProcessBuilder pb = new ProcessBuilder(jobConfig.command.split(" "));
-            //Map<String, String> env = pb.environment();
-            //env.put("jobid", jobid);
+            pb.environment().put("ELASTICSEARCH_SERVER", properties.getElasticSearchHost());
+            pb.environment().put("ELASTICSEARCH_PORT",  properties.getElasticSearchPort());
+            pb.environment().put("ELASTICSEARCH_INDEX", properties.getElasticSearchIndex());
+
             File log = new File(executionLog.toString());
             pb.directory(new File(jobConfig.executionDirectory));
             pb.redirectErrorStream(true);
