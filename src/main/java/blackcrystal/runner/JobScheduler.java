@@ -1,13 +1,14 @@
 package blackcrystal.runner;
 
 import blackcrystal.model.JobConfig;
-import blackcrystal.service.DirectoryService;
-import blackcrystal.service.ExecutionService;
-import blackcrystal.service.JobConfigService;
 import blackcrystal.service.JobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
@@ -18,11 +19,13 @@ import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 
 @Component
-public class JobScheduler {
+public class JobScheduler implements ApplicationContextAware {
 
     private static final Logger logger = LoggerFactory.getLogger(JobScheduler.class);
 
     private Map<String, JobThreadReference> threads = new HashMap<>();
+
+    private AutowireCapableBeanFactory beanFactory;
 
     @Autowired
     private ThreadPoolTaskScheduler scheduler;
@@ -30,15 +33,10 @@ public class JobScheduler {
     @Autowired
     private JobService jobService;
 
-    @Autowired
-    private JobConfigService jobConfigService;
-
-    @Autowired
-    private ExecutionService executionService;
-
-    @Autowired
-    private DirectoryService directoryService;
-
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        beanFactory = applicationContext.getAutowireCapableBeanFactory();
+    }
 
     @Bean
     private ThreadPoolTaskScheduler taskScheduler() {
@@ -67,43 +65,46 @@ public class JobScheduler {
      * @return
      */
     public boolean addJob(JobConfig jobConfig) {
-        if(jobConfig.enabled){
-            Runner runner = new Runner(jobConfig, executionService, directoryService);
+        if (jobConfig.enabled) {
+            Runner runner = new Runner(jobConfig);
+            //Add runner into spring context so it can auto-wire other dependencies
+            beanFactory.autowireBean(runner);
+            beanFactory.initializeBean(runner, runner.toString());
+
             ScheduledFuture scheduledFuture =
                     scheduler.schedule(runner, new CronTrigger(jobConfig.executionTime));
             threads.put(jobConfig.name, new JobThreadReference(runner, scheduledFuture));
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
+
     public boolean updateJob(JobConfig jobConfig) {
-        if(jobConfig.enabled){
+        if (jobConfig.enabled) {
             JobThreadReference ref = threads.get(jobConfig.name);
             //Cancel scheduler and add a new scheduler
             ref.scheduledFuture.cancel(true);
             ref.scheduledFuture = scheduler.schedule(ref.runner, new CronTrigger(jobConfig.executionTime));
             threads.put(jobConfig.name, ref);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
     public boolean deleteJob(String name) {
-        if(threads.containsKey(name)){
+        if (threads.containsKey(name)) {
             JobThreadReference ref = threads.get(name);
             ref.runner.running = false;
             ref.scheduledFuture.cancel(true);
             threads.remove(name);
             return true;
-        }else{
+        } else {
             return false;
         }
-
     }
-
 
 }
 

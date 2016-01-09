@@ -4,31 +4,28 @@ import blackcrystal.model.JobConfig;
 import blackcrystal.model.JobExecution;
 import blackcrystal.service.DirectoryService;
 import blackcrystal.service.ExecutionService;
-import blackcrystal.service.JobConfigService;
 import blackcrystal.utility.FileUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.OffsetDateTime;
-import java.util.concurrent.Callable;
 
-
-@Component
-public class Runner implements Runnable, Callable {
+public class Runner implements Runnable {
 
     private static final Logger logger =
             LoggerFactory.getLogger(Runner.class);
 
     private JobConfig jobConfig;
 
-
+    @Autowired
     private ExecutionService executionService;
 
+    @Autowired
     private DirectoryService directoryService;
 
     public boolean running = true;
@@ -36,16 +33,14 @@ public class Runner implements Runnable, Callable {
     public Runner() {
     }
 
-    //TODO : Temporary Solution - do not pass the reference of JobConfigService here
-    public Runner(JobConfig jobConfig, ExecutionService executionService, DirectoryService directoryService) {
+    public Runner(JobConfig jobConfig) {
         this.jobConfig = jobConfig;
-        this.executionService = executionService;
-        this.directoryService = directoryService;
     }
 
 
     @Override
     public void run() {
+
         OffsetDateTime startTime = OffsetDateTime.now();
         Process process = null;
         Integer executionId = executionService.getNextExecId(jobConfig);
@@ -54,7 +49,7 @@ public class Runner implements Runnable, Callable {
 
         FileUtility.createDirectory(executionDirectory);
 
-        logger.info("starting execution of "+ jobConfig.name);
+        logger.debug("starting execution of : " + jobConfig.name);
         try {
             ProcessBuilder pb = new ProcessBuilder(jobConfig.command.split(" "));
             //Map<String, String> env = pb.environment();
@@ -66,15 +61,15 @@ public class Runner implements Runnable, Callable {
 
             process = pb.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error while execution job : " + jobConfig.name, e);
         }
 
         while (process.isAlive()) {
             if (running == false) {
+                logger.info("Attempting to destroy the process for the job : " + jobConfig.name, e);
                 process.destroy();
             }
         }
-
 
         OffsetDateTime endTime = OffsetDateTime.now();
         Duration duration = Duration.between(startTime, endTime);
@@ -90,8 +85,4 @@ public class Runner implements Runnable, Callable {
         executionService.writeExecutionResult(jobConfig, jobExecution);
     }
 
-    @Override
-    public Object call() throws Exception {
-        return null;
-    }
 }
