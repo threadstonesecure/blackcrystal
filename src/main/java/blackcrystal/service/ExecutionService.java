@@ -42,7 +42,7 @@ public class ExecutionService {
 
     public Integer getNextExecId(JobConfig jobConfig) {
         Integer lastExecutionId = executionRepository.findLastExecutionID(jobConfig.name);
-        return lastExecutionId + 1;
+        return lastExecutionId == null ? 1 : lastExecutionId + 1;
     }
 
     public JobExecution writeExecutionResult(JobConfig jobConfig, JobExecution jobExecution) {
