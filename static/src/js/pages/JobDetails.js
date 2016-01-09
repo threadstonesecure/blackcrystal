@@ -3,6 +3,7 @@ import React from 'react';
 import NavMain from '../components/navigation/NavMain';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
+import { jobURI, jobDetailURI } from '../utils/Config'
 import ResourceSelector  from '../components/resources/ResourceSelector';
 import { Input, Row, Col, Grid, Button } from 'react-bootstrap';
 import LinkedStateMixin from 'react-addons-linked-state-mixin';
@@ -22,7 +23,7 @@ const JobDetails = React.createClass({
     put(data) {
         var request = $.ajax({
             type: "PUT",
-            url: "http://localhost:8080/job",
+            url: jobURI(),
             contentType: 'application/json',
             data: JSON.stringify(data),
             dataType: "json"
@@ -40,7 +41,7 @@ const JobDetails = React.createClass({
     },
 
     loadData() {
-        return $.getJSON("http://localhost:8080/job/" + this.props.params.name);
+        return $.getJSON(jobDetailURI(this.props.params.name));
     },
 
     getInitialState() {

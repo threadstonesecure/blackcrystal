@@ -3,6 +3,7 @@ import React from 'react';
 import NavMain from '../components/navigation/NavMain';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
+import { resourcesURI } from '../utils/Config'
 import { Link } from 'react-router';
 import {Button, Alert,Grid,Row,Col,Navbar,Nav,NavDropdown,MenuItem,NavItem, Glyphicon} from 'react-bootstrap';
 import $ from 'jquery';
@@ -67,7 +68,7 @@ var View1Row = React.createClass({
 const Resources = React.createClass({
 
     loadData() {
-        return $.getJSON("http://localhost:8080/resources");
+        return $.getJSON(resourcesURI());
     },
     getInitialState() {
         return {data: []};

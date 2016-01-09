@@ -1,13 +1,16 @@
 import React from 'react';
 import { Label } from 'react-bootstrap';
 import $ from 'jquery';
+import { jobExecutionLogURI } from '../../utils/Config'
+
+
 
 
 const ConsoleOutput = React.createClass({
     loadData() {
         return $.ajax({
             type: "GET",
-            url: "http://localhost:8080/job/" + this.props.jobName + "/execution/" + this.props.executionId + "/log",
+            url: jobExecutionLogURI(this.props.jobName, this.props.executionId),
             contentType: 'text/plain',
         });
     },

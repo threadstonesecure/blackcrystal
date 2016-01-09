@@ -3,6 +3,7 @@ import {Input, MenuItem} from 'react-bootstrap';
 import $ from 'jquery';
 import ResourceTypeDirectory from './ResourceTypeDirectory'
 import ResourceTypeGit from './ResourceTypeGit'
+import { resourcesTypesURI } from '../../utils/Config'
 
 const ResourceType = React.createClass({
     collect() {
@@ -19,7 +20,7 @@ const ResourceType = React.createClass({
     },
 
     loadData() {
-        return $.getJSON("http://localhost:8080/resource-types");
+        return $.getJSON(resourcesTypesURI());
     },
     getInitialState() {
         return {data: []};

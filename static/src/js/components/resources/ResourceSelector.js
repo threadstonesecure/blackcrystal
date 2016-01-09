@@ -3,11 +3,12 @@ import {Input, MenuItem} from 'react-bootstrap';
 import $ from 'jquery';
 import ResourceTypeDirectory from './ResourceTypeDirectory'
 import ResourceTypeGit from './ResourceTypeGit'
+import { resourcesURI } from '../../utils/Config'
 
 const ResourceSelector = React.createClass({
 
     loadData() {
-        return $.getJSON("http://localhost:8080/resources");
+        return $.getJSON(resourcesURI());
     },
     getInitialState() {
         return {data: [], selected: this.props.selected};

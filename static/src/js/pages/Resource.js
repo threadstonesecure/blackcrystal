@@ -5,6 +5,7 @@ import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
 import ResourceType from '../components/resources/ResourceType';
 import LinkedStateMixin from 'react-addons-linked-state-mixin';
+import { resourcesURI } from '../utils/Config'
 import {Button, Alert,Grid,Row,Col,Navbar,Nav,NavDropdown,MenuItem,NavItem, Glyphicon,Input} from 'react-bootstrap';
 import $ from 'jquery';
 
@@ -20,7 +21,7 @@ const Resource = React.createClass({
     put(data) {
         var request = $.ajax({
             type: "PUT",
-            url: "http://localhost:8080/resource",
+            url: resourcesURI(),
             contentType: 'application/json',
             data: JSON.stringify(data),
             dataType: "json"

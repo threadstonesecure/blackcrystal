@@ -3,6 +3,8 @@ import React from 'react';
 import NavMain from '../components/navigation/NavMain';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
+import { jobExecutionURI, jobExecutionsURI } from '../utils/Config'
+
 import { Link } from 'react-router';
 import { Row, Col, Grid, Glyphicon, Pagination } from 'react-bootstrap';
 import $ from 'jquery';
@@ -56,7 +58,7 @@ const pageSize = 20;
 
 const Executions = React.createClass({
     loadData(page) {
-        var request = $.getJSON("http://localhost:8080/job/" + this.props.params.name + "/executions?size=" + pageSize + "&page=" + page);
+        var request = $.getJSON(jobExecutionsURI(this.props.params.name, pageSize, page));
         request.success(function (data) {
             if (this.isMounted()) {
                 this.setState(data);

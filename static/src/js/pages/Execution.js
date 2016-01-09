@@ -12,6 +12,7 @@ import juration from 'juration';
 import Status from '../components/executions/Status';
 import Hosts from '../components/executions/Hosts';
 import Plays from '../components/executions/Plays';
+import { jobExecutionURI } from '../utils/Config';
 
 import $ from 'jquery';
 
@@ -25,7 +26,7 @@ const Execution = React.createClass({
         return juration.stringify(duration, {format: 'long'});
     },
     loadData() {
-        return $.getJSON("http://localhost:8080/job/" + this.props.params.name + "/execution/" + this.props.params.id);
+        return $.getJSON(jobExecutionURI(this.props.params.name, this.props.params.id)) ;
     },
     getInitialState() {
         return {startTime: '', endTime: '', duration: '0', result: '0'};

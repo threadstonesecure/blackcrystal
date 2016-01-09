@@ -3,9 +3,12 @@ import React from 'react';
 import NavMain from '../components/navigation/NavMain';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
+import { jobsURI } from '../utils/Config'
+
 import { Link } from 'react-router';
 import {Button, Glyphicon, Grid, Row, Col, Navbar, Nav, Modal} from 'react-bootstrap';
 import $ from 'jquery';
+
 
 var View1Table = React.createClass({
     render: function () {
@@ -62,7 +65,7 @@ var View1Row = React.createClass({
 const Jobs = React.createClass({
 
     loadData() {
-        return $.getJSON("http://localhost:8080/jobs");
+        return $.getJSON(jobsURI());
     },
 
     getInitialState() {
