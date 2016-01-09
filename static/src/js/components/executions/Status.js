@@ -3,6 +3,8 @@ import React from 'react';
 import {PieChart} from 'react-d3-components';
 import d3 from 'd3';
 import elasticsearch from 'elasticsearch';
+import { elasticSearchHost } from '../../utils/Config';
+
 
 
 var sort = null;
@@ -12,7 +14,7 @@ const Status = React.createClass({
 
     // this.props.jobName + "/execution/" + this.props.executionId +
     getClient(){
-        return new elasticsearch.Client({host: 'localhost:9200', log: 'error'});
+        return new elasticsearch.Client(elasticSearchHost());
     },
     getData(){
         var client = this.getClient();

@@ -2,11 +2,13 @@ import React from 'react';
 import { Input, Row, Col, Grid, Table } from 'react-bootstrap';
 import $ from 'jquery';
 import elasticsearch from 'elasticsearch';
+import { elasticSearchHost } from '../../utils/Config';
+
 
 
 const Hosts = React.createClass({
     getClient(){
-        return new elasticsearch.Client({host: 'localhost:9200', log: 'trace'});
+        return new elasticsearch.Client(elasticSearchHost());
     },
 
     getData(){
