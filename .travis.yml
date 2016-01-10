@@ -4,11 +4,14 @@ language: java
 jdk:
 - oraclejdk8
 
-node_js:
-  - "4.1"
+env:
+  - TRAVIS_NODE_VERSION="4.1"
+
+install:
+  - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
 
 before_script:
-- cd static/src && npm install && npm run build
+- cd static/src && npm install && npm run build && cd ../../
 
 script:
 - ./gradlew clean --info
