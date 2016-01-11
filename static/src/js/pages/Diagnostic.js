@@ -4,7 +4,7 @@ import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
 import { Row, Col, Grid  } from 'react-bootstrap';
 
-const Diagnostic = React.createClass({
+const Overview = React.createClass({
   getInitialState() {
     return {};
   },
@@ -13,8 +13,8 @@ const Diagnostic = React.createClass({
   render() {
     return (
       <div>
-        <NavMain activePage="overview"/>
-        <PageHeader title="Overview"/>
+        <NavMain activePage="diagnostic"/>
+        <PageHeader title="Diagnostic"/>
         <Grid>
           <Row>
             <div className="box box-success">
@@ -33,4 +33,4 @@ const Diagnostic = React.createClass({
   }
 });
 
-export default Diagnostic;
+export default Overview;

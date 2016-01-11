@@ -4,6 +4,7 @@ import { Router, Route } from 'react-router';
 import App from './App';
 import Jobs from './pages/Jobs';
 import Overview from './pages/Overview';
+import Diagnostic from './pages/Diagnostic';
 import Resources from './pages/Resources';
 import JobDetails from './pages/JobDetails';
 import HomePage from './pages/HomePage';
@@ -22,17 +23,18 @@ export default class Root extends Component {
     const { history } = this.props;
     return (
       <Router history={history}>
-        <Route  path="/" component={App}>
-            <Route path="jobs" component={Jobs} />
-            <Route path="resources" component={Resources} />
-            <Route path="new/resource" component={Resource} />
-            <Route path="job/:name" component={JobDetails} />
-            <Route path="job/:name/executions" component={Executions} />
-            <Route path="job/:name/execution/:id" component={Execution} />
-            <Route path="new/job" component={JobDetails} />
-            <Route path="overview" component={Overview} />
-            <Route path="*" component={NotFoundPage} />
-          </Route>
+        <Route path="/" component={App}>
+          <Route path="jobs" component={Jobs}/>
+          <Route path="resources" component={Resources}/>
+          <Route path="new/resource" component={Resource}/>
+          <Route path="job/:name" component={JobDetails}/>
+          <Route path="job/:name/executions" component={Executions}/>
+          <Route path="job/:name/execution/:id" component={Execution}/>
+          <Route path="new/job" component={JobDetails}/>
+          <Route path="overview" component={Overview}/>
+          <Route path="diagnostic" component={Diagnostic}/>
+          <Route path="*" component={NotFoundPage}/>
+        </Route>
       </Router>
     );
   }
