@@ -1,11 +1,13 @@
 package blackcrystal.runner;
 
 import blackcrystal.app.ApplicationProperties;
+import blackcrystal.model.AnsibleCallbackArgs;
 import blackcrystal.model.JobConfig;
 import blackcrystal.model.JobExecution;
 import blackcrystal.service.DirectoryService;
 import blackcrystal.service.ExecutionService;
 import blackcrystal.utility.FileUtility;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,15 +52,18 @@ public class Runner implements Runnable {
         Integer executionId = executionService.getNextExecId(jobConfig);
         Path executionDirectory = directoryService.executionDirectory(jobConfig.name, executionId.toString());
         Path executionLog = directoryService.executionLog(jobConfig.name, executionId.toString());
-
+        AnsibleCallbackArgs args = new AnsibleCallbackArgs(jobConfig.name, executionId.toString());
+        String argsAsJson = new Gson().toJson(args);
         FileUtility.createDirectory(executionDirectory);
 
         logger.debug("starting execution of : " + jobConfig.name);
         try {
+
             ProcessBuilder pb = new ProcessBuilder(jobConfig.command.split(" "));
             pb.environment().put("ELASTICSEARCH_SERVER", properties.getElasticSearchHost());
             pb.environment().put("ELASTICSEARCH_PORT",  properties.getElasticSearchPort());
             pb.environment().put("ELASTICSEARCH_INDEX", properties.getElasticSearchIndex());
+            pb.environment().put("ELASTICSEARCH_DOC_ARGS", argsAsJson);
 
             File log = new File(executionLog.toString());
             pb.directory(new File(jobConfig.executionDirectory));
