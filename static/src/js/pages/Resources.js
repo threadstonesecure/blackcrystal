@@ -5,113 +5,79 @@ import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
 import { resourcesURI } from '../utils/Config'
 import { Link } from 'react-router';
-import {Button, Alert,Grid,Row,Col,Navbar,Nav,NavDropdown,MenuItem,NavItem, Glyphicon} from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 import $ from 'jquery';
 
 
-const NoResourceAlert = React.createClass({
-    render: function () {
-        return (
-            <Alert bsStyle="warning">
-                <strong>There are no resources! </strong> You need to add a resource to start working, with jobs!
-            </Alert>
-        );
-    }
-});
-
-
-var View1Table = React.createClass({
-    render: function () {
-        return (
-            <table className="table table-bordered table-hover table-condensed">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {
-                    this.props.data.map(function (row) {
-                        return <View1Row key={row.name} data={row}/>
-                    })}
-                </tbody>
-            </table>
-        );
-    }
-});
-
-var View1Row = React.createClass({
-    render: function () {
-        return (
-            <tr>
-                <td>{this.props.data.name}</td>
-                <td>
-                    <Button bsStyle="link" href="#">
-                        <Glyphicon glyph="edit"/>
-                        Edit
-                    </Button>
-                </td>
-                <td>
-                    <Button bsStyle="link" href="#">
-                        <Glyphicon glyph="remove"/>
-                        Delete
-                    </Button>
-                </td>
-            </tr>
-        );
-    }
-});
-
-
 const Resources = React.createClass({
+  loadData() {
+    return $.getJSON(resourcesURI());
+  },
+  getInitialState() {
+    return {data: []};
+  },
+  componentDidMount(){
+    this.loadData().success(function (data) {
+      if (this.isMounted()) {
+        console.log(data)
+        this.setState({data: data});
+      }
+    }.bind(this))
+  },
+  render() {
+    return (
+      <div>
+        <NavMain activePage="resources"/>
+        <PageHeader title="Resources"/>
 
-    loadData() {
-        return $.getJSON(resourcesURI());
-    },
-    getInitialState() {
-        return {data: []};
-    },
+        <Grid>
+          <Row>
+            <div className="box box-success">
+              <div className="box-header with-border">
+                <h3 className="box-title">Resource List</h3>
 
-    componentDidMount(){
-        this.loadData().success(function (data) {
-            if (this.isMounted()) {
-                console.log(data)
-                this.setState({data: data});
-            }
-        }.bind(this))
-    },
-    render() {
-        return (
-            <div>
-                <NavMain activePage="resources"/>
-                <PageHeader title="Resources" subTitle=""/>
+                <div className="box-tools pull-right">
+                  <Link to="/new/resource">
+                    <button type="button" className="btn bg-olive btn-flat ion-plus"> Add Resource
+                    </button>
+                  </Link>
+                </div>
+              </div>
 
-                <Grid>
-                    <Row>
-                        <Navbar inverse>
-                            <Nav pullRight>
-                                <Link to="/new/resource"> <Glyphicon glyph="plus"/> Add
-                                    Resource </Link>
-                            </Nav>
-                        </Navbar>
-                    </Row>
-                    <Row>
-                        <Col>
-                            {
-                                (this.state.data == null || this.state.data.length == 0 )
-                                    ? <NoResourceAlert/> : <View1Table data={this.state.data}/>
-                            }
-                        </Col>
-                    </Row>
-
-                </Grid>
-
-                <PageFooter />
+              <div className="box-body">
+                <table className="table table-striped">
+                  <tbody>
+                  <tr>
+                    <th>Resource Name</th>
+                    <th>Type</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                  {
+                    this.state.data.map(function (row, i) {
+                      return <tr>
+                        <td>{row.name}</td>
+                        <td>{row.type}</td>
+                        <td>
+                          <button type="button" className="btn bg-olive btn-flat ion-edit"> Edit</button>
+                        </td>
+                        <td>
+                          <button type="button" className="btn  btn-flat ion-ios-trash"> Delete</button>
+                        </td>
+                      </tr>
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
-        );
-    }
+          </Row>
+
+        </Grid>
+
+        <PageFooter />
+      </div>
+    );
+  }
 });
 
 export default Resources;
