@@ -1,9 +1,7 @@
 import React from 'react';
-
 import NavMain from '../components/navigation/NavMain';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
-import ResourceSelector  from './../components/resources/ResourceSelector';
 import { Row, Col, Grid  } from 'react-bootstrap';
 import LinkedStateMixin from 'react-addons-linked-state-mixin';
 import ConsoleOutput from '../components/executions/ConsoleOutput';
@@ -17,7 +15,6 @@ import StartTime from '../components/executions/StartTime';
 import TotalTasks from '../components/executions/TotalTasks';
 import ExecutedCommand from '../components/executions/ExecutedCommand';
 import { jobExecutionURI } from '../utils/Config';
-
 import $ from 'jquery';
 
 
@@ -27,7 +24,7 @@ const Execution = React.createClass({
         return $.getJSON(jobExecutionURI(this.props.params.name, this.props.params.id)) ;
     },
     getInitialState() {
-        return {startTime: '', endTime: '', duration: '0', result: '0'};
+        return {startTime: '', endTime: '', duration: '0', result: '0', executedCommand: ''};
     },
     componentDidMount(){
 
@@ -53,7 +50,7 @@ const Execution = React.createClass({
                      </Row>
 
                     <Row>
-                        <ExecutedCommand jobName={this.props.params.name} executionId={this.props.params.id}/>
+                        <Col><ExecutedCommand command={this.state.executedCommand} /></Col>
                     </Row>
     
                     <Row>
@@ -69,7 +66,6 @@ const Execution = React.createClass({
                     <Row>
                         <ConsoleOutput jobName={this.props.params.name} executionId={this.props.params.id}/>
                     </Row>
-
                 </Grid>
                 <PageFooter />
             </div>

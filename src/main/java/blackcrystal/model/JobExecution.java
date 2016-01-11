@@ -38,6 +38,9 @@ public class JobExecution implements Serializable {
     @Column(nullable = true)
     private Integer result;
 
+    @Column(nullable = true)
+    private String executedCommand;
+
 
     public JobExecution() {
     }
@@ -100,6 +103,14 @@ public class JobExecution implements Serializable {
         this.result = result;
     }
 
+    public String getExecutedCommand() {
+        return executedCommand;
+    }
+
+    public void setExecutedCommand(String executedCommand) {
+        this.executedCommand = executedCommand;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -113,7 +124,8 @@ public class JobExecution implements Serializable {
         if (startTime != null ? !startTime.equals(that.startTime) : that.startTime != null) return false;
         if (endTime != null ? !endTime.equals(that.endTime) : that.endTime != null) return false;
         if (duration != null ? !duration.equals(that.duration) : that.duration != null) return false;
-        return !(result != null ? !result.equals(that.result) : that.result != null);
+        if (result != null ? !result.equals(that.result) : that.result != null) return false;
+        return !(executedCommand != null ? !executedCommand.equals(that.executedCommand) : that.executedCommand != null);
 
     }
 
@@ -126,6 +138,7 @@ public class JobExecution implements Serializable {
         result1 = 31 * result1 + (endTime != null ? endTime.hashCode() : 0);
         result1 = 31 * result1 + (duration != null ? duration.hashCode() : 0);
         result1 = 31 * result1 + (result != null ? result.hashCode() : 0);
+        result1 = 31 * result1 + (executedCommand != null ? executedCommand.hashCode() : 0);
         return result1;
     }
 }

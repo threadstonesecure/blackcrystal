@@ -87,6 +87,7 @@ public class Runner implements Runnable {
         jobExecution.setDuration(duration.getSeconds());
         jobExecution.setStartTime(startTime);
         jobExecution.setEndTime(endTime);
+        jobExecution.setExecutedCommand(jobConfig.command);
 
         executionService.writeExecutionResult(jobConfig, jobExecution);
     }

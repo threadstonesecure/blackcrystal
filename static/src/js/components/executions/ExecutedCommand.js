@@ -1,20 +1,18 @@
 import React from 'react';
-import moment from 'moment';
 
 const ExecutedCommand = React.createClass({
   render() {
     return (
-    
+      <div className="col-md-12">
         <div className="box">
-            <div className="box-header with-border">
-              <i className="fa fa-text-width"></i>
-              <h3 className="box-title">Executed Command</h3>
-            </div>
-             <div className="box-body">
-              <p>ansible-playbook -i ../development.ini webservers.yml</p>
-            </div>
-           </div>
-
+          <div className="box-header with-border">
+            <h3 className="box-title">Executed Command</h3>
+          </div>
+          <div className="box-body">
+            <p>{this.props.command}</p>
+          </div>
+        </div>
+      </div>
     );
   }
 });
