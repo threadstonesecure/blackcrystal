@@ -41,6 +41,14 @@ module.exports = {
       test: /\.css$/,
       loader: ExtractTextPlugin.extract("style-loader", "css-loader"),
       include: path.join(__dirname, 'css')
+    },
+    { 
+      test: /\.png$/, 
+      loader: "url-loader?limit=100000" 
+    },
+    { 
+      test: /\.jpg$/, 
+      loader: "file-loader" 
     }]
   }
 };

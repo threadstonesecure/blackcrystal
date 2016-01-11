@@ -49,26 +49,28 @@ const Tasks = React.createClass({
     },
     render() {
         return (
-            <div>
-
-                <Table striped bordered condensed hover>
-                    <thead>
-                    <tr>
-                        <th>Tasks</th>
-
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        this.state.tasks.map(function (row) {
+             <div className="box">
+                <div className="box-header with-border">
+                    <h3 className="box-title">Executed Tasks</h3>
+                </div>
+                <div className="box-body">
+                    <table className="table table-bordered">
+                        <tbody>
+                        <tr>
+                            <th>#</th>
+                            <th>Tasks</th>
+                        </tr>
+                        {
+                        this.state.tasks.map(function (row,i) {
                             return <tr>
+                            <td>{i + 1}.</td>
                                 <td>{row.key}</td>
 
                             </tr>
                         })}
-                    </tbody>
-                </Table>
-
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     }

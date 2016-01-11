@@ -1,38 +1,29 @@
 import React from 'react';
-import { Label, Glyphicon } from 'react-bootstrap';
-
 
 const ExitCode = React.createClass({
-    getStyle() {
-        if (this.props.result == 0) {
-            return "success"
-        } else {
-            return "danger"
-        }
-    },
     getText() {
         if (this.props.result == 0) {
-            return " Yeyy! - Exit Code is : " + this.props.result
-        } else {
-            return " Opps! - Exit Code is : " + this.props.result
+            return "OK"
+        } else  if (this.props.result == 0) {
+            return "Possibly, errors in the playbook!"
+        }else  if (this.props.result == 2) {
+            return "Failed hosts!"
+        }else  if (this.props.result == 3) {
+            return "Dark hosts!"
         }
-    },
-    getIcon() {
-        if (this.props.result == 0) {
-            return "ok"
-        } else {
-            return "fire!"
-        }
-    },
+    }, 
     render() {
         return (
-            <div>
-                <h2>
-                    <Label bsStyle={this.getStyle()}>
-                        <Glyphicon glyph={this.getIcon()}/>&nbsp;{this.getText()}
-                    </Label>
-                </h2>
-            </div>
+            <div className="col-md-3 col-sm-6 col-xs-12">
+              <div className="info-box">
+                <span className="info-box-icon bg-blue"><i className="ion-android-exit"></i></span>
+                <div className="info-box-content">
+                  <span className="info-box-text">Exit Code</span>
+                  <span className="info-box-number">{this.props.result}</span>
+                  <span className="info-box-text">{this.getText()}</span>
+                </div>
+               </div>
+             </div>
         );
     }
 });

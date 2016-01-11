@@ -11,8 +11,6 @@ var sort = null;
 
 
 const Status = React.createClass({
-
-    // this.props.jobName + "/execution/" + this.props.executionId +
     getClient(){
         return new elasticsearch.Client(elasticSearchHost());
     },
@@ -39,9 +37,9 @@ const Status = React.createClass({
             }
         }).then(function (resp) {
             var pieData = [];
-            resp.aggregations.status.buckets.map(function (item) {
-                var i = {x: item.key, y: item.doc_count}
-                pieData.push(i);
+            resp.aggregations.status.buckets.map(function (item,i) {
+                var element = {key:i, x: item.key, y: item.doc_count}
+                pieData.push(element);
             })
             var data = {
                 values: pieData
@@ -74,17 +72,28 @@ const Status = React.createClass({
 
         var sort = null;
         return (
-            <div>
+             <div className="box">
+            <div className="box-header with-border">
+              <h3 className="box-title">Task Execution Overview</h3>
+
+              <div className="box-tools pull-right">
+                <button type="button" className="btn btn-box-tool" data-widget="collapse"><i className="fa fa-minus"></i>
+                </button>
+                <button type="button" className="btn btn-box-tool" data-widget="remove"><i className="fa fa-times"></i></button>
+              </div>
+            </div>
+            <div className="box-body">
+              
                 <PieChart
                     data={this.state.data}
                     width={600}
                     height={400}
                     tooltipHtml={tooltipScatter}
-                    tooltipOffset={top: 10, left: 10}
                     colorScale={colorScale}
                     />
 
-            </div>
+             </div>
+           </div>
         );
     }
 });

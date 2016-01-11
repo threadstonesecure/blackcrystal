@@ -5,6 +5,8 @@ import jQuery from 'jquery';
 import bootstrap from 'bootstrap';
 import ReactDOM from 'react-dom';
 import '../css/style.css';
+import '../css/AdminLTE.min.css';
+import '../css/skins/_all-skins.min.css';
 
 
 const rootEl = document.getElementById('root');

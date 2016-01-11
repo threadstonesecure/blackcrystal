@@ -49,27 +49,31 @@ const Plays = React.createClass({
     },
     render() {
         return (
-            <div>
+                <div className="box">
+                <div className="box-header with-border">
+                    <h3 className="box-title">Executed Plays</h3>
+                </div>
 
-                <Table striped bordered condensed hover>
-                    <thead>
-                    <tr>
-                        <th>Plays</th>
-
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        this.state.plays.map(function (row) {
+                <div className="box-body">
+                    <table className="table table-bordered">
+                        <tbody>
+                        <tr>
+                            <th>#</th>
+                            <th>Plays</th>
+                        </tr>
+                        {
+                        this.state.plays.map(function (row,i) {
                             return <tr>
+                            <td>{i + 1}.</td>
                                 <td>{row.key}</td>
 
                             </tr>
                         })}
-                    </tbody>
-                </Table>
-
+                        </tbody>
+                    </table>
+                </div>
             </div>
+ 
         );
     }
 });

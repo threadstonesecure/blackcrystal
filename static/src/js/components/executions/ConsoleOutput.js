@@ -27,11 +27,14 @@ const ConsoleOutput = React.createClass({
     },
     render() {
         return (
-            <div>
-                <h2><Label bsStyle="primary">Console Output</Label></h2>
-                <pre className="console-output">{this.state.logs}</pre>
-
+             <div className="box">
+                <div className="box-header with-border">
+                    <h3 className="box-title">Console Output</h3>
+                </div>
+             <div className="box-body" >
+                 <pre className="console-output">{this.state.logs}</pre>
             </div>
+           </div>
         );
     }
 });
