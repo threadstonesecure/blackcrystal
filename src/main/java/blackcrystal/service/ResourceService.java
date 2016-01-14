@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.swing.text.html.Option;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -37,6 +38,21 @@ public class ResourceService {
     }
 
 
+    //TODO : improve readability
+    public Optional<Resource> getResource(String name) {
+        if(resourceExist(name)){
+            Path p = directoryService.resourceConfigFile(name);
+            try {
+               return Optional.of(FileUtility.read(p, Resource.class));
+            } catch (Exception e) {
+                logger.error("Could not load the resource:" + p.toString(), e);
+                return Optional.empty();
+            }
+        }else{
+            return Optional.empty();
+        }
+    }
+
     public boolean writeResourceConfig(Resource resource) {
         Path resourceConfigFile = directoryService.resourceConfigFile(resource.name);
         Path resourceDirectory = directoryService.resourceDirectory(resource.name);
@@ -65,6 +81,12 @@ public class ResourceService {
 
     public boolean resourceExist(Resource resource) {
         return Files.exists(directoryService.resourceDirectory(resource.name));
+    }
+    //TODO : remove one of the resourceExist methods
+    public boolean resourceExist(String name) {
+        Resource resource = new Resource();
+        resource.name = name;
+        return resourceExist(resource);
     }
 
 }

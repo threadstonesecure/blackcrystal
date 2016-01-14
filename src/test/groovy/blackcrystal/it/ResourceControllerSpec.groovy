@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.RequestEntity
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.web.WebAppConfiguration
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
@@ -66,13 +67,24 @@ class ResourceControllerSpec extends Specification {
         thrown HttpServerErrorException
     }
 
-    void "/resource/:name should return NOT_IMPLEMENTED for get request"() {
+    void "/resource/:name should return the resource"() {
         given:
-        RequestEntity request = RequestEntity.get(serviceURI(resourceName)).build()
+        def expectedResourceConfig = testUtils.resourceConfig2
         when:
+        def request = RequestEntity.get(serviceURI("/$expectedResourceConfig.name")).build()
+        def response = new RestTemplate().exchange(request, String)
+        then:
+        response.body.contains(expectedResourceConfig.name) == true
+    }
+
+    void "/resource/:name should return return 404 - NOT_FOUND, if resource does not exist"() {
+        when:
+        def request = RequestEntity.get(serviceURI("/WrongResourceName")).build()
         new RestTemplate().exchange(request, String)
         then:
-        thrown HttpServerErrorException
+        then:
+        HttpClientErrorException exception = thrown()
+        exception.statusCode == HttpStatus.NOT_FOUND
     }
 
     void "/resource should return CREATED for PUT request if resource does not exist"() {

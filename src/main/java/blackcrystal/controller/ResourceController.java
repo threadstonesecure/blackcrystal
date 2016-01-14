@@ -51,8 +51,10 @@ public class ResourceController {
 
     @ResponseBody
     @RequestMapping(value = "/resource/{name}", method = RequestMethod.GET)
-    public ResponseEntity get(@PathVariable String name) {
-        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<?> get(@PathVariable String name) {
+        return resourceService.getResource(name)
+                .map(r -> new ResponseEntity(r, HttpStatus.OK))
+                .orElse(new ResponseEntity(HttpStatus.NOT_FOUND));
     }
 
 
