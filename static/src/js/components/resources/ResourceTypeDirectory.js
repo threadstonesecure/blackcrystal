@@ -3,17 +3,22 @@ import {Input} from 'react-bootstrap';
 
 const ResourceTypeDirectory = React.createClass({
     getInitialState: function() {
-        return {directoryPath: ''};
+        return {directoryPath: this.props.resource.directoryPath};
     },
     handleChange: function(event) {
         this.setState({directoryPath: event.target.value});
     },
+    componentWillReceiveProps: function(newProps) {
+      this.setState({directoryPath: newProps.resource.directoryPath});
+    },
     render() {
         return (
-            <div>
-                <Input type="text" label="Directory Path" onChange={this.handleChange}
-                       placeholder="Enter the directory path of your ansible-project on host"/>
-            </div>
+          <div className="form-group">
+              <label>Directory Path</label>
+              <input type="text" className="form-control"
+                     value={this.state.directoryPath}  onChange={this.handleChange}
+                     placeholder="Directory Path"></input>
+          </div>
         );
     }
 });

@@ -27,6 +27,7 @@ export default class Root extends Component {
           <Route path="jobs" component={Jobs}/>
           <Route path="resources" component={Resources}/>
           <Route path="new/resource" component={Resource}/>
+          <Route path="resource/:name" component={Resource}/>
           <Route path="job/:name" component={JobDetails}/>
           <Route path="job/:name/executions" component={Executions}/>
           <Route path="job/:name/execution/:id" component={Execution}/>

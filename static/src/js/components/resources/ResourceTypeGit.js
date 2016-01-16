@@ -5,7 +5,10 @@ import { Input, Tooltip, OverlayTrigger, Glyphicon, Grid, Row, Col } from 'react
 const ResourceTypeGit = React.createClass({
     mixins: [LinkedStateMixin],
     getInitialState: function () {
-        return {repository: '', version: '', remote: 'origin', acceptHostkey: false};
+        return {repository: this.props.resource.repository,
+            version: this.props.resource.version,
+            remote: this.props.resource.remote,
+            acceptHostkey: this.props.resource.acceptHostkey};
     },
 
     render() {

@@ -19,7 +19,6 @@ const Resources = React.createClass({
   componentDidMount(){
     this.loadData().success(function (data) {
       if (this.isMounted()) {
-        console.log(data)
         this.setState({data: data});
       }
     }.bind(this))
@@ -59,7 +58,9 @@ const Resources = React.createClass({
                         <td>{row.name}</td>
                         <td>{row.type}</td>
                         <td>
-                          <button type="button" className="btn bg-olive btn-flat ion-edit"> Edit</button>
+                          <Link to={"/resource/" + row.name}>
+                            <button type="button" className="btn bg-olive btn-flat ion-edit"> Edit</button>
+                          </Link>
                         </td>
                         <td>
                           <button type="button" className="btn  btn-flat ion-ios-trash"> Delete</button>

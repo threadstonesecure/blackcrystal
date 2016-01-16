@@ -22,7 +22,6 @@ const ResourceSelector = React.createClass({
         this.loadData().success(function (data) {
             if (this.isMounted()) {
                 this.setState({data: data});
-                console.log("settgin state on resource selector")
             }
         }.bind(this))
     },

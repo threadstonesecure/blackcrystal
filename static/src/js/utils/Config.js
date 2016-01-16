@@ -24,6 +24,10 @@ export function resourceURI() {
     return getBlackCrystalHost()+"/resource";
 }
 
+export function resourceDetailURI(name) {
+	return resourceURI()+"/"+name;
+}
+
 export function jobsURI() {
   	return getBlackCrystalHost()+"/jobs";
 }
