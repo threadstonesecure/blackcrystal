@@ -28,7 +28,10 @@
     "extract-text-webpack-plugin": "1.0.0",
     "webpack-sources" : "0.1.0",
     "css-loader" : "0.23.1",
-    "html-webpack-plugin" : "1.7.0"
+    "html-webpack-plugin" : "1.7.0",
+    "font-awesome-webpack" : "0.0.4",
+    "url-loader" : "0.5.7",
+    "expose-loader" : "0.7.1"
   },
   "dependencies": {
     "babel-runtime": "^5.8.25",
